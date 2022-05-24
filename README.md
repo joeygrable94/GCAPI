@@ -19,6 +19,11 @@ http://localhost:8888/api/v1/redoc
 http://localhost:8888/api/v1/docs
 http://localhost:8888/api/v1/docs/openapi.json
 
+
+https://rogulski.it/blog/sqlalchemy-14-async-orm-with-fastapi/
+https://rogulski.it/blog/fastapi-async-db/
+https://www.azepug.az/posts/fastapi/ecommerce-fastapi-nuxtjs/ecommerce-pytest-user-auth-part1.html
+
 ## Frontend
 
 - [Wait-For-It.sh](https://github.com/vishnubob/wait-for-it)
