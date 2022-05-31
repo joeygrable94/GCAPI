@@ -9,6 +9,3 @@ sleep 10;
 # Run migrations
 alembic upgrade head
 "
-
-sleep 5;
-alembic upgrade head;
