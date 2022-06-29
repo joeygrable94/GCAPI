@@ -1,5 +1,22 @@
+# Security
 
-openssl rand -hex 32
+## Generate Secrets
+
+`openssl rand -hex 32`
+
+## Testing for Security Leaks
+
+### GitLeaks
+
+    gitleaks detect --verbose --config=./gitleaks.toml
+
+#### References & Issues
+
+- [GitLeaks Repository](https://github.com/zricethezav/gitleaks)
+- [GitLeaks Allow List for Inline Cases of False Positive Secrets Leak](https://github.com/zricethezav/gitleaks/issues/579)
+- [GitLeaks Custom Config .toml File](https://github.com/zricethezav/gitleaks/issues/787)
+
+---
 
 ## Full Stack
 
