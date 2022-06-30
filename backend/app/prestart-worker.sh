@@ -1,5 +1,11 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 
-echo "Running inside /app/prestart-worder.sh
+echo "Prestarting Backend Worker..."
 
-... check celery status or db connection?"
+# Check the DB is connected.
+python /app/app/prestart.py
+sleep 1;
+
+# Check Celery Connection
+echo "Check celery status or db connection?"
+sleep 1;
