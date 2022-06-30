@@ -1,4 +1,4 @@
-#! /usr/bin/env sh
+#! /usr/bin/env bash
 set -e
 
 MODULE_NAME=${MODULE_NAME:-app}
