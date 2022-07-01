@@ -8,9 +8,6 @@ COPY ./app/nginx-backend-not-found.conf /app/nginx-backend-not-found.conf
 
 COPY ./app/package*.json /app/
 
-COPY ./app/wait-for-it.sh /app/wait-for-it.sh
-RUN chmod +x /app/wait-for-it.sh
-
 COPY ./app/ /app/
 
 RUN npm install
