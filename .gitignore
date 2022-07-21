@@ -211,3 +211,5 @@ data/
 .vscode/
 !/_notes/ipad-notes.txt
 archive*.yml
+!/backend/app/tests-start.sh
+
