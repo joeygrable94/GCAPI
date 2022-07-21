@@ -4,7 +4,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 COPY ./app/requirements.dev.txt /tmp/requirements.dev.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.dev.txt
+RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.dev.txt
 
 COPY ./app/start-worker.sh /start-worker.sh
 RUN chmod +x /start-worker.sh
