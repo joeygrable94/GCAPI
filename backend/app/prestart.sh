@@ -10,6 +10,3 @@ sleep 1;
 # Run DB migrations
 alembic upgrade head
 sleep 1;
-
-python /app/app/initial_data.py
-sleep 1;
