@@ -1,7 +1,9 @@
 version: "3"
+
 services:
+
   proxy:
-    image: traefik:latest
+    image: traefik:2.8
     ports:
       - "81:80"
       - "8090:8080"
@@ -27,9 +29,10 @@ services:
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
       - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.rule=Host(`${DOMAIN?Variable not set}`)
       - traefik.http.services.${STACK_NAME?Variable not set}-traefik-public.loadbalancer.server.port=80
+
   db:
     platform: linux/x86_64
-    image: mysql:latest
+    image: mysql:8
     env_file: .env
     ports:
       - "3306:3306"
@@ -47,14 +50,16 @@ services:
     volumes:
       - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
       - app_db_data:/var/lib/mysql
+
   cache:
-    image: redis
+    image: redis:7
     env_file: .env
     ports:
       - "6379:6379"
     restart: "always"
     volumes:
       - app_cache:/data
+
   queue:
     image: rabbitmq:3-management
     ports:
@@ -62,6 +67,7 @@ services:
       - "15672:15672"
     volumes:
       - app_queue:/var/lib/rabbitmq
+
   worker:
     image: "${DOCKER_IMAGE_PREFIX}/worker:${TAG-latest}"
     env_file: .env
@@ -83,6 +89,7 @@ services:
       dockerfile: worker.dockerfile
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
+
   backend:
     image: '${DOCKER_IMAGE_PREFIX}/backend:${TAG-latest}'
     env_file: .env
@@ -113,6 +120,7 @@ services:
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
+
   frontend:
     image: '${DOCKER_IMAGE_PREFIX}/frontend:${TAG-latest}'
     env_file: .env
@@ -131,6 +139,7 @@ services:
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
       - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+
 volumes:
   app_db_data:
     driver: local
@@ -138,8 +147,7 @@ volumes:
     driver: local
   app_queue:
     driver: local
-  app_task_data:
-    driver: local
+
 networks:
   traefik-public:
     external: ${TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL-false}
