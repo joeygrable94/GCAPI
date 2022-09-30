@@ -8,13 +8,6 @@ dist/
 # App Files
 # Backend
 backend/app/**
-!backend/app/prestart.sh
-!backend/app/prestart-worker.sh
-!backend/app/start-tests.sh
-!backend/app/start.sh
-!backend/app/start-worker.sh
-!backend/app/start-reload.sh
-!backend/app/start-tests.sh
 !backend/app/wait-for-it.sh
 
 # Frontend
