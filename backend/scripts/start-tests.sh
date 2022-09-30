@@ -5,4 +5,4 @@ set -e
 python /app/app/prestart.py
 sleep 1;
 
-bash ./scripts/test.sh "$@"
+bash /app/scripts/test.sh "$@"

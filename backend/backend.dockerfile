@@ -7,8 +7,8 @@ COPY ./app/requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt \
     && poetry config virtualenvs.create false
 
-COPY ./app/start.sh ./app/start-reload.sh /
-RUN chmod +x /start.sh /start-reload.sh
+COPY ./scripts/prestart.sh ./scripts/start.sh ./scripts/start-reload.sh ./scripts/start-tests.sh /
+RUN chmod +x /prestart.sh /start.sh /start-reload.sh /start-tests.sh
 
 COPY ./app /app
 WORKDIR /app/
