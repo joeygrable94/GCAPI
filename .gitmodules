@@ -1,0 +1,3 @@
+[submodule "backend/app"]
+	path = backend/app
+	url = git@github.com:joeygrable94/GCAPI-Backend.git
