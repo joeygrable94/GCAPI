@@ -78,27 +78,27 @@ services:
     volumes:
       - app_queue:/var/lib/rabbitmq
 
-  worker:
-    image: "${DOCKER_IMAGE_PREFIX}/worker:${TAG-latest}"
-    env_file: .env
-    restart: "on-failure"
-    depends_on:
-      - db
-      - cache
-      - queue
-    environment:
-      - SERVER_NAME=${DOMAIN?Variable not set}
-      - SERVER_HOST=http://${DOMAIN?Variable not set}
-      - SMTP_HOST=${SMTP_HOST?Variable not set}
-      - CELERY_WORKER_BROKER=${CELERY_WORKER_BROKER}
-      - CELERY_WORKER_BACKEND=${CELERY_WORKER_BACKEND}
-    volumes:
-      - ./backend/app:/app
-    build:
-      context: ./backend
-      dockerfile: worker.dockerfile
-      args:
-        INSTALL_DEV: ${INSTALL_DEV-true}
+  # worker:
+  #   image: "${DOCKER_IMAGE_PREFIX}/worker:${TAG-latest}"
+  #   env_file: .env
+  #   restart: "on-failure"
+  #   depends_on:
+  #     - db
+  #     - cache
+  #     - queue
+  #   environment:
+  #     - SERVER_NAME=${DOMAIN?Variable not set}
+  #     - SERVER_HOST=http://${DOMAIN?Variable not set}
+  #     - SMTP_HOST=${SMTP_HOST?Variable not set}
+  #     - CELERY_WORKER_BROKER=${CELERY_WORKER_BROKER}
+  #     - CELERY_WORKER_BACKEND=${CELERY_WORKER_BACKEND}
+  #   volumes:
+  #     - ./backend/app:/app
+  #   build:
+  #     context: ./backend
+  #     dockerfile: worker.dockerfile
+  #     args:
+  #       INSTALL_DEV: ${INSTALL_DEV-true}
 
   backend:
     image: '${DOCKER_IMAGE_PREFIX}/backend:${TAG-latest}'
@@ -133,26 +133,36 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.entrypoints=websecure
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.tls.certresolver=sslcerts
 
-  frontend:
-    image: '${DOCKER_IMAGE_PREFIX}/frontend:${TAG-latest}'
+  # frontend:
+  #   image: '${DOCKER_IMAGE_PREFIX}/frontend:${TAG-latest}'
+  #   env_file: .env
+  #   networks:
+  #     - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+  #     - default
+  #   depends_on:
+  #     - backend
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: frontend.dockerfile
+  #     args:
+  #       FRONTEND_ENV: ${FRONTEND_ENV-development}
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
+  #     - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
+  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.entrypoints=websecure
+  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.tls.certresolver=sslcerts
+
+  whoami:
+    image: "traefik/whoami"
     env_file: .env
-    networks:
-      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-      - default
-    depends_on:
-      - backend
-    build:
-      context: ./frontend
-      dockerfile: frontend.dockerfile
-      args:
-        FRONTEND_ENV: ${FRONTEND_ENV-development}
     labels:
       - traefik.enable=true
-      - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
-      - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.entrypoints=websecure
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.tls.certresolver=sslcerts
+      - traefik.http.services.${STACK_NAME?Variable not set}-whoami.loadbalancer.server.port=80
+      - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.rule=Host(`whoami.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.entrypoints=websecure
+      - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.tls.certresolver=sslcerts
 
 volumes:
   app_db_data:
