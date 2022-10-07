@@ -5,30 +5,40 @@ services:
   proxy:
     image: traefik:2.8
     ports:
-      - "81:80"
-      - "8090:8080"
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
     restart: "always"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./certs:/etc/certs:ro
+      - ./certs:/certs:ro
     command:
-      - --providers.docker=true
-      - --providers.docker.constraints=Label(`traefik.constraint-label`, `${TRAEFIK_CONSTRAINT_TAG?Variable not set}`)
-      - --providers.docker.exposedbydefault=false
-      # - --providers.docker.swarmmode
       - --accesslog
       - --log
       - --api
       - --api.insecure=true
+      - --providers.docker=true
+      - --providers.docker.constraints=Label(`traefik.constraint-label`, `${TRAEFIK_CONSTRAINT_TAG?Variable not set}`)
+      - --providers.docker.exposedbydefault=false
+      # - --providers.docker.swarmmode
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.sslcerts.acme.httpchallenge=true
+      - --certificatesresolvers.sslcerts.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.sslcerts.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      - --certificatesresolvers.sslcerts.acme.email=${FIRST_SUPERUSER?Certificate resolver requires a valid email}
+      - --certificatesresolvers.sslcerts.acme.storage=/certs/acme.json
     labels:
       - traefik.enable=true
       - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
-      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.rule=Host(`${DOMAIN?Variable not set}`)
       - traefik.http.services.${STACK_NAME?Variable not set}-traefik-public.loadbalancer.server.port=80
+      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.rule=Host(`${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.entrypoints=websecure
+      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.tls.certresolver=sslcerts
 
   db:
     platform: linux/x86_64
@@ -118,8 +128,10 @@ services:
     labels:
       - traefik.enable=true
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
-      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.entrypoints=websecure
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.tls.certresolver=sslcerts
 
   frontend:
     image: '${DOCKER_IMAGE_PREFIX}/frontend:${TAG-latest}'
@@ -137,8 +149,10 @@ services:
     labels:
       - traefik.enable=true
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
-      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
       - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.entrypoints=websecure
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.tls.certresolver=sslcerts
 
 volumes:
   app_db_data:
