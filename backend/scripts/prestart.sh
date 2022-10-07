@@ -8,5 +8,5 @@ python /app/app/prestart.py
 sleep 1;
 
 # Run DB migrations
-# alembic upgrade head
-# sleep 1;
+alembic upgrade head
+sleep 1;
