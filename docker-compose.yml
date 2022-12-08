@@ -25,20 +25,20 @@ services:
       - --providers.docker.exposedbydefault=false
       # - --providers.docker.swarmmode
       - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.sslcerts.acme.httpchallenge=true
-      - --certificatesresolvers.sslcerts.acme.httpchallenge.entrypoint=web
-      - --certificatesresolvers.sslcerts.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.sslcerts.acme.email=${FIRST_SUPERUSER?Certificate resolver requires a valid email}
-      - --certificatesresolvers.sslcerts.acme.storage=/certs/acme.json
+      # - --entrypoints.websecure.address=:443
+      # - --certificatesresolvers.sslcerts.acme.httpchallenge=true
+      # - --certificatesresolvers.sslcerts.acme.httpchallenge.entrypoint=web
+      # - --certificatesresolvers.sslcerts.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+      # - --certificatesresolvers.sslcerts.acme.email=${FIRST_SUPERUSER?Certificate resolver requires a valid email}
+      # - --certificatesresolvers.sslcerts.acme.storage=/certs/acme.json
     labels:
       - traefik.enable=true
       - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
       - traefik.http.services.${STACK_NAME?Variable not set}-traefik-public.loadbalancer.server.port=80
       - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.rule=Host(`${DOMAIN?Variable not set}`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.entrypoints=websecure
-      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.tls.certresolver=sslcerts
+      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.entrypoints=web
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public.tls.certresolver=sslcerts
 
   db:
     platform: linux/x86_64
@@ -57,48 +57,13 @@ services:
       - MYSQL_USER=${DATABASE_USER}
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
       - MYSQL_DB_NAME=${DATABASE_NAME}
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      timeout: 10s
+      retries: 5
     volumes:
       - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
       - app_db_data:/var/lib/mysql
-
-  cache:
-    image: redis:7
-    env_file: .env
-    ports:
-      - "6379:6379"
-    restart: "always"
-    volumes:
-      - app_cache:/data
-
-  queue:
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - app_queue:/var/lib/rabbitmq
-
-  # worker:
-  #   image: "${DOCKER_IMAGE_PREFIX}/worker:${TAG-latest}"
-  #   env_file: .env
-  #   restart: "on-failure"
-  #   depends_on:
-  #     - db
-  #     - cache
-  #     - queue
-  #   environment:
-  #     - SERVER_NAME=${DOMAIN?Variable not set}
-  #     - SERVER_HOST=http://${DOMAIN?Variable not set}
-  #     - SMTP_HOST=${SMTP_HOST?Variable not set}
-  #     - CELERY_WORKER_BROKER=${CELERY_WORKER_BROKER}
-  #     - CELERY_WORKER_BACKEND=${CELERY_WORKER_BACKEND}
-  #   volumes:
-  #     - ./backend/app:/app
-  #   build:
-  #     context: ./backend
-  #     dockerfile: worker.dockerfile
-  #     args:
-  #       INSTALL_DEV: ${INSTALL_DEV-true}
 
   backend:
     image: '${DOCKER_IMAGE_PREFIX}/backend:${TAG-latest}'
@@ -110,8 +75,10 @@ services:
       - default
     restart: "on-failure"
     depends_on:
+      db:
+        condition: service_healthy
+    links:
       - db
-      - cache
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SERVER_HOST=http://${DOMAIN?Variable not set}
@@ -130,46 +97,32 @@ services:
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.entrypoints=websecure
-      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.tls.certresolver=sslcerts
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.entrypoints=web
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.tls.certresolver=sslcerts
 
-  # frontend:
-  #   image: '${DOCKER_IMAGE_PREFIX}/frontend:${TAG-latest}'
-  #   env_file: .env
-  #   networks:
-  #     - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-  #     - default
-  #   depends_on:
-  #     - backend
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: frontend.dockerfile
-  #     args:
-  #       FRONTEND_ENV: ${FRONTEND_ENV-development}
-  #   labels:
-  #     - traefik.enable=true
-  #     - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
-  #     - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
-  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
-  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.entrypoints=websecure
-  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.tls.certresolver=sslcerts
-
-  whoami:
-    image: "traefik/whoami"
+  frontend:
+    image: '${DOCKER_IMAGE_PREFIX}/frontend:${TAG-latest}'
     env_file: .env
+    networks:
+      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+      - default
+    depends_on:
+      - backend
+    build:
+      context: ./frontend
+      dockerfile: frontend.dockerfile
+      args:
+        FRONTEND_ENV: ${FRONTEND_ENV-development}
     labels:
       - traefik.enable=true
-      - traefik.http.services.${STACK_NAME?Variable not set}-whoami.loadbalancer.server.port=80
-      - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.rule=Host(`whoami.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.entrypoints=websecure
-      - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.tls.certresolver=sslcerts
+      - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
+      - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.entrypoints=web
+      # - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.tls.certresolver=sslcerts
 
 volumes:
   app_db_data:
-    driver: local
-  app_cache:
-    driver: local
-  app_queue:
     driver: local
 
 networks:
