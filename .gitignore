@@ -18,7 +18,7 @@ frontend/app/**
 
 # Solid JS
 frontend.solid.dockerfile
-frontend/solid
+frontend/solid*
 
 # local certs
 certs/**
