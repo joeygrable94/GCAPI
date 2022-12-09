@@ -1,3 +1,6 @@
 [submodule "GCAPI-Backend"]
 	path = backend/app
 	url = https://github.com/joeygrable94/GCAPI-Backend.git
+[submodule "GCAPI-Frontend"]
+	path = frontend/app
+	url = https://github.com/joeygrable94/GCAPI-Frontend.git
