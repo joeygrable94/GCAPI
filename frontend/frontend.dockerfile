@@ -3,8 +3,8 @@ FROM node:17.8 as build-frontend
 
 WORKDIR /app
 
-COPY ./app/nginx.conf /app/nginx.conf
-COPY ./app/nginx-backend-not-found.conf /app/nginx-backend-not-found.conf
+COPY ./config/nginx.conf /app/nginx.conf
+COPY ./config/nginx-backend-not-found.conf /app/nginx-backend-not-found.conf
 
 COPY ./app/package*.json /app/
 
