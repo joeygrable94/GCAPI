@@ -12,8 +12,6 @@ backend/app/**
 
 # Frontend
 frontend/app/**
-!frontend/app/nginx.conf
-!frontend/app/nginx-backend-not-found.conf
 !frontend/app/wait-for-it.sh
 
 # Solid JS
