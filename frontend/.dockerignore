@@ -1,4 +1,11 @@
+# node
 node_modules
-venv
-.env
+npm-debug.log
+
+# solid
 dist
+.solid
+
+# dev
+.prettier*
+.git*
