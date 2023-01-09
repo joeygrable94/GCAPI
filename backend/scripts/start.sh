@@ -27,4 +27,4 @@ else
 fi
 
 # Start ASGI Server with live reload
-exec uvicorn $APP_MODULE --host $HOST --port $PORT --log-level $LOG_LEVEL --reload
+exec uvicorn $APP_MODULE --host $HOST --port $PORT --log-level $LOG_LEVEL
