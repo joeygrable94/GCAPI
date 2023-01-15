@@ -84,8 +84,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    links:
-      - db
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SMTP_HOST=${SMTP_HOST}
@@ -112,8 +110,6 @@ services:
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
-    links:
-      - backend
     build:
       context: ./frontend
       dockerfile: frontend.dockerfile
