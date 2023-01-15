@@ -88,7 +88,6 @@ services:
       - db
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
-      - SERVER_HOST=http://${DOMAIN?Variable not set}
       - SMTP_HOST=${SMTP_HOST}
       - CELERY_WORKER_BROKER=${CELERY_WORKER_BROKER}
       - CELERY_WORKER_BACKEND=${CELERY_WORKER_BACKEND}
