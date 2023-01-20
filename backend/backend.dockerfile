@@ -10,7 +10,9 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements
 COPY ./scripts/prestart.sh ./scripts/start.sh ./scripts/start-reload.sh ./scripts/start-tests.sh /
 RUN chmod +x /prestart.sh /start.sh /start-reload.sh /start-tests.sh
 
-COPY ./app /app
+COPY ./app/app /app/app
+COPY ./app/alembic /app/alembic
+COPY ./app/alembic.ini ./app/start.py ./app/prestart.py /app/
 WORKDIR /app/
 
 # Copy poetry.lock* in case it doesn't exist in the repo
