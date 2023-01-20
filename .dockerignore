@@ -1,0 +1,39 @@
+# important
+.env
+.gitignore
+.gitmodules
+.github
+.git
+.pre-commit-config.yaml
+.prettier*
+
+*.db
+
+# notes
+_notes
+README.md
+SECURITY.md
+
+# logs
+*.log
+
+# vscode
+.vscode
+.code-*
+
+# docker
+.dockerignore
+docker-compose.*.yml
+docker-compose.yml
+
+# backend
+.pytest_cache
+venv
+htmlcov
+poetry.lock
+
+# frontend
+node_modules
+package-lock.json
+.solid
+dist
