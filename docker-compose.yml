@@ -3,7 +3,7 @@ version: "3"
 services:
 
   proxy:
-    image: traefik:2.8
+    image: traefik:${TRAEFIK_TAG-2.8}
     ports:
       - "80:80"
       # - "443:443"
@@ -112,7 +112,7 @@ services:
       context: ./frontend
       dockerfile: frontend.dockerfile
       args:
-        FRONTEND_ENV: ${FRONTEND_ENV-development}
+        INSTALL_DEV: ${INSTALL_DEV-true}
     labels:
       - traefik.enable=true
       - traefik.constraint-label=${TRAEFIK_CONSTRAINT_TAG?Variable not set}
@@ -125,5 +125,5 @@ volumes:
     driver: local
 
 networks:
-  traefik-public:
+  traffic_public:
     external: ${TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL-false}
