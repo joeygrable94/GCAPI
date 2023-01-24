@@ -48,8 +48,7 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-whoami.rule=Host(`whoami.${DOMAIN?Variable not set}`)
 
   db:
-    platform: "linux/aarch64"
-    image: mysql:8
+    image: mariadb:10
     env_file: .env
     ports:
       - "3306:3306"
