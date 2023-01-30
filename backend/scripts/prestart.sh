@@ -4,9 +4,9 @@ set -e
 echo "Prestarting Backend API..."
 
 # Check the DB is connected.
-python /app/prestart.py
-sleep 1;
+# python /app/prestart.py
+# sleep 1;
 
 # Run DB migrations
-echo "alembic upgrade head"
-sleep 1;
+# echo "alembic upgrade head"
+# sleep 1;
