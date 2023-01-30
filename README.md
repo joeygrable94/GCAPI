@@ -69,10 +69,12 @@ Check current db version.
 After changing db models/tables, run revision, and autogenerate.
 Always add a message about what changed in the db models/tables.
 
-`docker-compose run backend alembic revision --autogenerate -m "added table ____"`
+    docker-compose run backend alembic revision --autogenerate -m "added table ____"
+    docker-compose run backend alembic revision --autogenerate -m "updated accesstoken token_jti column"
 
 To upgrade or downgrade the container database version.
 
+    docker-compose run backend alembic stamp head
     docker-compose run backend alembic upgrade head
     docker-compose run backend alembic upgrade +1
     docker-compose run backend alembic downgrade -1
