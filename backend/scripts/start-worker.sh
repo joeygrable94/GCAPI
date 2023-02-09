@@ -1,6 +1,12 @@
 #! /usr/bin/env bash
 set -e
 
-echo "SAMPLE RUN: python /app/app/worker_pre_start.py"
+echo "Prestarting Backend Worker..."
+
+# Check the DB is connected.
+python /app/prestart.py
+sleep 1;
+
+echo "Starting Backend Worker..."
 
 celery --app app.worker worker -l info -Q main-queue -c 1
