@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+
+  proxy:
+    ports:
+      - "80:80"
+      - "8090:8080"
+    command:
+      - --providers.docker
+      - --providers.docker.constraints=Label(`traefik.constraint-label-stack`, `${TRAEFIK_TAG?Variable not set}`)
+      - --providers.docker.exposedbydefault=false
+      # - --providers.docker.swarmmode
+      - --accesslog
+      - --log
+      - --api
+      - --api.insecure=true
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-traefik-public-http.rule=Host(`${DOMAIN?Variable not set}`)
+      - traefik.http.services.${STACK_NAME?Variable not set}-traefik-public.loadbalancer.server.port=80
+
+  whoami:
+    ports:
+      - "8989:80"
+
+  dbadmin:
+    ports:
+      - "8181:8080"
+
+  db:
+    ports:
+      - "3306:3306"
+
+  cache:
+    ports:
+      - "6379:6379"
+
+  flower:
+    ports:
+      - "5555:5555"
+
+  worker:
+    volumes:
+      - ./backend/app:/app
+
+  backend:
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./backend/app:/app
+    labels:
+      - traefik.enable=true
+      - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
+      - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
+      - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        FRONTEND_ENV: dev
+    labels:
+      - traefik.enable=true
+      - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
+      - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+
+networks:
+  traefik-public:
+    # For local dev, don't expect an external Traefik network
+    external: false
