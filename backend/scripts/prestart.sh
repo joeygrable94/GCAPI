@@ -5,4 +5,9 @@ echo "Prestarting Backend API..."
 
 # Check the DB is connected.
 python /app/prestart.py
-sleep 1;
+
+# Upgrade DB
+alembic upgrade head
+
+# Create initial data in DB
+# python /app/initial_data.py
