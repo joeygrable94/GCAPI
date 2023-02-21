@@ -54,6 +54,7 @@ Thumbs.db
 *.code-workspace
 .vscode
 .mypy_cache
+docker-compose.*.yml
 docker-stack.yml
 *PRIVATE*
 .DS_Store
