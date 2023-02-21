@@ -4,8 +4,8 @@ services:
 
   proxy:
     ports:
-      - "80:80"
-      - "8090:8080"
+      - 80:80
+      - 8090:8080
     command:
       - --providers.docker
       - --providers.docker.constraints=Label(`traefik.constraint-label-stack`, `${TRAEFIK_TAG?Variable not set}`)
@@ -22,23 +22,23 @@ services:
 
   whoami:
     ports:
-      - "8989:80"
+      - 8989:80
 
   dbadmin:
     ports:
-      - "8181:8080"
+      - 8181:8080
 
   db:
     ports:
-      - "3306:3306"
+      - 3306:3306
 
   cache:
     ports:
-      - "6379:6379"
+      - 6379:6379
 
   flower:
     ports:
-      - "5555:5555"
+      - 5555:5555
 
   worker:
     volumes:
@@ -46,7 +46,7 @@ services:
 
   backend:
     ports:
-      - "8888:8888"
+      - 8888:8888
     volumes:
       - ./backend/app:/app
     labels:

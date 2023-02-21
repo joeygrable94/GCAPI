@@ -5,9 +5,9 @@ services:
   proxy:
     image: traefik:${TRAEFIK_TAG-2.8}
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - 80:80
+      - 443:443
+      - 8080:8080
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
@@ -51,7 +51,7 @@ services:
     image: mariadb:10
     env_file: .env
     ports:
-      - "3306:3306"
+      - 3306:3306
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
@@ -75,7 +75,7 @@ services:
     image: '${DOCKER_IMAGE_PREFIX}/backend:${TAG-latest}'
     env_file: .env
     ports:
-      - "8888:8888"
+      - 8888:8888
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
