@@ -29,15 +29,15 @@ Use the base `example.env` file to create a local development `.env` file.
 
 Build the container and start descretely.
 
-    docker-compose up --build -d
+    docker compose up --build -d
 
 If the image is already built, start the container descretely
 
-    docker-compose up -d
+    docker compose up -d
 
 If breaking changes are introduced, a force recreate may be needed, and remove any orphans to keep the system lean.
 
-    docker-compose up --build --force-recreate --remove-orphans -d
+    docker compose up --build --force-recreate --remove-orphans -d
 
 ---
 
@@ -64,21 +64,21 @@ This GCAPI stack is based off the following [Stack Template FastAPI-PostgreSQL, 
 
 Check current db version.
 
-`docker-compose run backend alembic current`
+`docker compose run backend alembic current`
 
 After changing db models/tables, run revision, and autogenerate.
 Always add a message about what changed in the db models/tables.
 
-    docker-compose run backend alembic revision --autogenerate -m "added table ____"
-    docker-compose run backend alembic revision --autogenerate -m "updated accesstoken token_jti column"
+    docker compose run backend alembic revision --autogenerate -m "added table ____"
+    docker compose run backend alembic revision --autogenerate -m "updated accesstoken token_jti column"
 
 To upgrade or downgrade the container database version.
 
-    docker-compose run backend alembic stamp head
-    docker-compose run backend alembic upgrade head
-    docker-compose run backend alembic upgrade +1
-    docker-compose run backend alembic downgrade -1
-    docker-compose run backend alembic downgrade base
+    docker compose run backend alembic stamp head
+    docker compose run backend alembic upgrade head
+    docker compose run backend alembic upgrade +1
+    docker compose run backend alembic downgrade -1
+    docker compose run backend alembic downgrade base
 
 ---
 
