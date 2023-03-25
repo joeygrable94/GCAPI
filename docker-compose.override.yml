@@ -26,7 +26,7 @@ services:
 
   dbadmin:
     ports:
-      - 8181:8080
+      - 5050:8080
 
   db:
     ports:
@@ -43,12 +43,22 @@ services:
   worker:
     volumes:
       - ./backend/app:/app
+    build:
+      context: ./backend
+      dockerfile: worker.dockerfile
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-true}
 
   backend:
     ports:
       - 8888:8888
     volumes:
       - ./backend/app:/app
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+      args:
+        INSTALL_DEV: ${INSTALL_DEV-true}
     labels:
       - traefik.enable=true
       - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}

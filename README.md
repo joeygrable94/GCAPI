@@ -8,6 +8,7 @@
     - [Building the Container](#building-the-container)
 - [The Full Stack](#the-full-stack)
   - [Backend](#backend)
+    - [FastAPI \& Auth0](#fastapi--auth0)
     - [OpenAPI Documentation](#openapi-documentation)
     - [Database Object Relation Mapping](#database-object-relation-mapping)
     - [Alembic Database Migration](#alembic-database-migration)
@@ -48,6 +49,14 @@ This GCAPI stack is based off the following [Stack Template FastAPI-PostgreSQL, 
 ---
 
 ## Backend
+
+### FastAPI & Auth0
+
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [FastAPI - Authentication](https://fastapi.tiangolo.com/tutorial/security/)
+- [FastAPI - OAuth2 with Password](https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/)
+- [FastAPI - OAuth0 with Auth0 - GitHub](https://github.com/dorinclisu/fastapi-auth0)
+- [Complete tutorial using auth0.com with FastAPI](https://www.youtube.com/watch?v=cGRdFjgAy9s)
 
 ### OpenAPI Documentation
 

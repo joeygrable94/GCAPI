@@ -7,7 +7,8 @@ echo "Prestarting Backend API..."
 python /app/prestart.py
 
 # Upgrade DB
-alembic upgrade head
+# echo "Running Backend DB Migrations..."
+# alembic upgrade head
 
 # Create initial data in DB
-# python /app/initial_data.py
+python /app/initial_data.py
