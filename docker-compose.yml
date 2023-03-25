@@ -79,9 +79,38 @@ services:
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.tls.certresolver=le
         - traefik.http.services.${STACK_NAME?Variable not set}-whoami.loadbalancer.server.port=80
 
+  db:
+    image: mysql:8
+    env_file: .env
+    ports:
+      - 3306:3306
+    networks:
+      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
+      - default
+    restart: "unless-stopped"
+    environment:
+      - MYSQL_HOST=${DATABASE_SERVER}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_USER=${DATABASE_USER}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DB_NAME=${DATABASE_NAME}
+    healthcheck:
+      test: ["CMD-SHELL", 'mysql --user=${DATABASE_USER} --password=${DATABASE_PASSWORD} --execute="SELECT 1;" ${DATABASE_NAME}']
+      interval: 10s
+      timeout: 5s
+      retries: 8
+    volumes:
+      - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
+      - app_db_data:/var/lib/mysql
+    deploy:
+      placement:
+        constraints:
+          - node.labels.${STACK_NAME?Variable not set}.app_db_data == true
+
   dbadmin:
     image: adminer
-    restart: always
+    restart: "always"
     networks:
       - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
       - default
@@ -99,40 +128,16 @@ services:
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.tls.certresolver=le
-        - traefik.http.services.${STACK_NAME?Variable not set}-dbadmin.loadbalancer.server.port=80
-
-  db:
-    image: mariadb:10
-    env_file: .env
-    ports:
-      - 3306:3306
-    networks:
-      - ${TRAEFIK_PUBLIC_NETWORK?Variable not set}
-      - default
-    restart: "unless-stopped"
-    environment:
-      - MYSQL_HOST=${DATABASE_SERVER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${DATABASE_NAME}
-      - MYSQL_USER=${DATABASE_USER}
-      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
-      - MYSQL_DB_NAME=${DATABASE_NAME}
-    healthcheck:
-      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
-      timeout: 10s
-      retries: 5
-    volumes:
-      - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
-      - app_db_data:/var/lib/mysql
-    deploy:
-      placement:
-        constraints:
-          - node.labels.${STACK_NAME?Variable not set}.app_db_data == true
+        - traefik.http.services.${STACK_NAME?Variable not set}-pgadmin.loadbalancer.server.port=5050
 
   cache:
     image: redis:7
     ports:
       - 6379:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      timeout: 10s
+      retries: 10
 
   flower:
     image: mher/flower:0.9.7
@@ -164,13 +169,18 @@ services:
 
   worker:
     image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-worker:${TAG-latest}'
+    restart: "on-failure"
     env_file:
       - .env
     volumes:
       - ./backend/app:/app
     depends_on:
-      - db
-      - cache
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+      backend:
+        condition: service_started
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SERVER_HOST=https://${DOMAIN?Variable not set}
@@ -193,6 +203,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      cache:
+        condition: service_healthy
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SMTP_HOST=${SMTP_HOST}
@@ -202,7 +214,7 @@ services:
       context: ./backend
       dockerfile: backend.dockerfile
       args:
-        INSTALL_DEV: ${INSTALL_DEV-true}
+        INSTALL_DEV: ${INSTALL_DEV-false}
     deploy:
       labels:
         - traefik.enable=true
