@@ -97,9 +97,10 @@ services:
       - MYSQL_DB_NAME=${DATABASE_NAME}
     healthcheck:
       test: ["CMD-SHELL", 'mysql --user=${DATABASE_USER} --password=${DATABASE_PASSWORD} --execute="SELECT 1;" ${DATABASE_NAME}']
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 8
+      retries: 20
+      start_period: 10s
     volumes:
       - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
       - app_db_data:/var/lib/mysql
@@ -136,8 +137,10 @@ services:
       - 6379:6379
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
-      timeout: 10s
-      retries: 10
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
 
   flower:
     image: mher/flower:0.9.7
@@ -175,12 +178,8 @@ services:
     volumes:
       - ./backend/app:/app
     depends_on:
-      db:
-        condition: service_healthy
-      cache:
-        condition: service_healthy
-      backend:
-        condition: service_started
+      - cache
+      - db
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SERVER_HOST=https://${DOMAIN?Variable not set}
@@ -201,10 +200,8 @@ services:
     volumes:
       - ./backend/app:/app
     depends_on:
-      db:
-        condition: service_healthy
-      cache:
-        condition: service_healthy
+      - cache
+      - db
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SMTP_HOST=${SMTP_HOST}
