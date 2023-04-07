@@ -15,4 +15,4 @@ if [ $(uname -s) = "Linux" ]; then
 fi
 
 docker compose up -d
-docker compose exec -T backend bash ./scripts/test-cov.sh "$@"
+docker compose exec -T backend bash ./scripts/test-cov.sh
