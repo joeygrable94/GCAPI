@@ -96,11 +96,10 @@ services:
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
       - MYSQL_DB_NAME=${DATABASE_NAME}
     healthcheck:
-      test: ["CMD-SHELL", 'mysql --user=${DATABASE_USER} --password=${DATABASE_PASSWORD} --execute="SELECT 1;" ${DATABASE_NAME}']
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     volumes:
       - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
       - app_db_data:/var/lib/mysql
@@ -137,10 +136,9 @@ services:
       - 6379:6379
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   flower:
     image: mher/flower:0.9.7

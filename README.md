@@ -73,6 +73,9 @@ This GCAPI stack is based off the following [Stack Template FastAPI-PostgreSQL, 
 
 Check current db version.
 
+`docker compose exec backend bash`
+`docker compose run backend alembic revision --autogenerate -m "initial db state"`
+
 `docker compose run backend alembic current`
 
 After changing db models/tables, run revision, and autogenerate.
