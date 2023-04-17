@@ -203,8 +203,6 @@ services:
     environment:
       - SERVER_NAME=${DOMAIN?Variable not set}
       - SMTP_HOST=${SMTP_HOST}
-      - CELERY_WORKER_BROKER=${CELERY_WORKER_BROKER}
-      - CELERY_WORKER_BACKEND=${CELERY_WORKER_BACKEND}
     build:
       context: ./backend
       dockerfile: backend.dockerfile
