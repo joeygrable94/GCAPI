@@ -9,4 +9,4 @@ sleep 1;
 
 echo "Starting Backend Worker..."
 
-celery --app app.worker worker -l info -Q main-queue -c 1
+celery --app app.worker worker -l info -Q tasks,websites,sitemaps,webpages -c 1
