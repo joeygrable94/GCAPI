@@ -1,6 +1,7 @@
 # Directories
 _archive
 _notes
+notes
 frontend-*
 test
 dist/
@@ -205,4 +206,3 @@ data/
 !/_notes/ipad-notes.txt
 archive*.yml
 !/backend/app/tests-start.sh
-
