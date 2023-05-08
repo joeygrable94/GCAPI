@@ -37,10 +37,10 @@ services:
         # Handle host with and without "www" to redirect to only one of them
         # Uses environment variable DOMAIN
         # To disable www redirection remove the Host() you want to discard, here and below for HTTPS
-        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.rule=Host(`${DOMAIN?Variable not set}`) || Host(`www.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.rule=Host(`${DOMAIN-localhost}`) || Host(`www.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.entrypoints=http
         # traefik-https the actual router using HTTPS
-        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.rule=Host(`${DOMAIN?Variable not set}`) || Host(`www.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.rule=Host(`${DOMAIN-localhost}`) || Host(`www.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.tls=true
         # Use the "le" (Let's Encrypt) resolver created below
@@ -49,10 +49,10 @@ services:
         - traefik.http.services.${STACK_NAME?Variable not set}-proxy.loadbalancer.server.port=80
         # Handle domain with and without "www" to redirect to only one
         # To disable www redirection remove the next line
-        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.regex=^https?://(www.)?(${DOMAIN?Variable not set})/(.*)
+        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.regex=^https?://(www.)?(${DOMAIN-localhost})/(.*)
         # Redirect a domain with www to non-www
         # To disable it remove the next line
-        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.replacement=https://${DOMAIN?Variable not set}/$${3}
+        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.replacement=https://${DOMAIN-localhost}/$${3}
         # Redirect a domain without www to www
         # To enable it remove the previous line and uncomment the next
         # - traefik.http.middlewares.${STACK_NAME}-www-redirect.redirectregex.replacement=https://www.${DOMAIN}/$${3}
@@ -70,10 +70,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.rule=Host(`whoami.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.rule=Host(`whoami.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.entrypoints=http
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.middlewares=${STACK_NAME?Variable not set}-https-redirect
-        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.rule=Host(`whoami.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.rule=Host(`whoami.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.tls.certresolver=le
@@ -121,10 +121,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.rule=Host(`dbadmin.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.rule=Host(`dbadmin.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.entrypoints=http
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.middlewares=${STACK_NAME?Variable not set}-https-redirect
-        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.rule=Host(`dbadmin.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.rule=Host(`dbadmin.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.tls.certresolver=le
@@ -159,10 +159,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.rule=Host(`flower.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.rule=Host(`flower.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.entrypoints=http
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.middlewares=${STACK_NAME?Variable not set}-https-redirect
-        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.rule=Host(`flower.${DOMAIN?Variable not set}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.rule=Host(`flower.${DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.tls.certresolver=le
@@ -179,8 +179,8 @@ services:
       - cache
       - db
     environment:
-      - SERVER_NAME=${DOMAIN?Variable not set}
-      - SERVER_HOST=https://${DOMAIN?Variable not set}
+      - SERVER_NAME=${DOMAIN-localhost}
+      - SERVER_HOST=https://${DOMAIN-localhost}
       # Allow explicit env var override for tests
       - SMTP_HOST=${SMTP_HOST?Variable not set}
     build:
@@ -201,7 +201,7 @@ services:
       - cache
       - db
     environment:
-      - SERVER_NAME=${DOMAIN?Variable not set}
+      - SERVER_NAME=${DOMAIN-localhost}
       - SMTP_HOST=${SMTP_HOST}
     build:
       context: ./backend
