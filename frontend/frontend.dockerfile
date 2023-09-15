@@ -10,6 +10,7 @@ RUN npm install
 COPY ./app/package.json ./app/package-lock.json \
     ./app/vite-env.d.ts ./app/vite.config.ts ./app/tsconfig.json \
     ./app/.prettierrc ./app/.prettierignore \
+    ./app/index.html \
     ./
 
 # copy code src
