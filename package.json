@@ -1,0 +1,14 @@
+{
+  "name": "gcapi",
+  "version": "0.0.1",
+  "description": "a full stack application for managing and processing Get Community client data",
+  "author": "Joey Grable",
+  "author-url": "https://getcommunity.com/team/joey-grable/",
+  "author-email": "joey@getcommunity.com",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run test",
+    "sqltodbml": "sql2dbml --mysql ./sql/gcapidb.sql -o ./sql/gcapidb.dbml"
+  }
+}
