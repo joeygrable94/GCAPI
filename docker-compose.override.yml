@@ -66,6 +66,8 @@ services:
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
 
   frontend:
+    ports:
+      - 3333:3000
     build:
       context: ./frontend
       args:
