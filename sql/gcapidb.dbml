@@ -1,599 +1,674 @@
 Table "gcapidb"."bdx_feed" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "username" VARCHAR(255) [pk, not null]
-  "password" VARCHAR(255) [not null]
-  "serverhost" VARCHAR(255) [not null]
-  "client_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "username" VARCHAR(255) [pk, not null]
+    "password" VARCHAR(255) [not null]
+    "serverhost" VARCHAR(255) [not null]
+    "client_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    username [unique, name: "username_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        username [unique, name: "username_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."client" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "title" VARCHAR(96) [pk, not null]
-  "content" VARCHAR(255)
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(96) [pk, not null]
+    "description" TEXT(5000)
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."client_bucket" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "description" VARCHAR(255)
-  "bucket_name" VARCHAR(100) [pk, not null]
-  "object_key" VARCHAR(255) [not null]
-  "client_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "description" TEXT(5000)
+    "bucket_name" VARCHAR(100) [pk, not null]
+    "object_key" VARCHAR(2048) [not null]
+    "client_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-    object_key [unique, name: "object_key_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+    }
+}
+
+Table "gcapidb"."client_report" {
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(96) [pk, not null]
+    "url" VARCHAR(2048) [not null]
+    "description" TEXT(5000)
+    "keys" BLOB
+
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+    }
+}
+
+Table "gcapidb"."client_report_note" {
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "client_report_id" CHAR(32) [not null]
+    "note_id" CHAR(32) [not null]
+
+    Indexes {
+        (client_report_id, note_id) [pk]
+        id [unique, name: "id_UNIQUE"]
+        client_report_id [name: "client_report_id_idx1"]
+        note_id [name: "note_id_idx"]
+    }
 }
 
 Table "gcapidb"."client_website" {
-  "id" CHAR(32) [pk, not null]
-  "client_id" CHAR(32) [not null]
-  "website_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "client_id" CHAR(32) [not null]
+    "website_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    website_id [name: "website_id_idx"]
-    client_id [name: "client_id_idx"]
-  }
+    Indexes {
+        (client_id, website_id) [pk]
+        id [unique, name: "id_UNIQUE"]
+        website_id [name: "website_id_idx"]
+        client_id [name: "client_id_idx"]
+    }
 }
 
 Table "gcapidb"."file_asset" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "name" VARCHAR(96) [pk, not null]
-  "extension" VARCHAR(255) [not null]
-  "size_kb" INT [not null]
-  "title" VARCHAR(255) [not null]
-  "description" VARCHAR(500)
-  "tags" BLOB
-  "is_private" TINYINT(1) [not null, default: 0]
-  "user_id" CHAR(32) [not null]
-  "bucket_id" CHAR(32) [not null]
-  "client_id" CHAR(32) [not null]
-  "geocoord_id" CHAR(32)
-  "bdx_feed_id" CHAR(32)
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "name" VARCHAR(96) [pk, not null]
+    "extension" VARCHAR(255) [not null]
+    "size_kb" INT [not null]
+    "title" VARCHAR(96) [not null]
+    "caption" VARCHAR(150)
+    "keys" BLOB
+    "is_private" TINYINT(1) [not null, default: 0]
+    "user_id" CHAR(32) [not null]
+    "bucket_id" CHAR(32) [not null]
+    "client_id" CHAR(32) [not null]
+    "geocoord_id" CHAR(32)
+    "bdx_feed_id" CHAR(32)
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    name [unique, name: "name_UNIQUE"]
-    user_id [name: "user_id_idx"]
-    bucket_id [name: "bucket_id_idx"]
-    client_id [name: "client_id_idx"]
-    geocoord_id [name: "geocoord_id_idx"]
-    bdx_feed_id [name: "bdx_feed_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        name [unique, name: "name_UNIQUE"]
+        user_id [name: "user_id_idx"]
+        bucket_id [name: "bucket_id_idx"]
+        client_id [name: "client_id_idx"]
+        geocoord_id [name: "geocoord_id_idx"]
+        bdx_feed_id [name: "bdx_feed_id_idx"]
+    }
 }
 
 Table "gcapidb"."gcft" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "group_name" VARCHAR(255) [not null]
-  "group_slug" VARCHAR(12) [pk, not null]
-  "client_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "group_name" VARCHAR(255) [not null]
+    "group_slug" VARCHAR(12) [pk, not null]
+    "client_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+    }
 }
 
 Table "gcapidb"."gcft_snap" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "snap_name" VARCHAR(255) [not null]
-  "snap_slug" VARCHAR(12) [pk, not null]
-  "altitude" INT
-  "gcft_id" CHAR(32) [not null]
-  "image_id" CHAR(32) [not null]
-  "geocoord_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "snap_name" VARCHAR(255) [not null]
+    "snap_slug" VARCHAR(12) [pk, not null]
+    "altitude" INT
+    "gcft_id" CHAR(32) [not null]
+    "image_id" CHAR(32) [not null]
+    "geocoord_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gcft_id [name: "gcft_id_idx"]
-    image_id [name: "image_id_idx"]
-    geocoord_id [name: "geocoord_id_idx"]
-    snap_slug [unique, name: "snap_slug_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gcft_id [name: "gcft_id_idx"]
+        image_id [name: "image_id_idx"]
+        geocoord_id [name: "geocoord_id_idx"]
+        snap_slug [unique, name: "snap_slug_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."gcft_snap_activeduration" {
-  "id" CHAR(32) [pk, not null]
-  "session_id" CHAR(32) [not null]
-  "active_seconds" INT [not null]
-  "visit_date" DATETIME [not null]
-  "gcft_id" CHAR(32) [not null]
-  "snap_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "session_id" CHAR(32) [not null]
+    "active_seconds" INT [not null]
+    "visit_date" DATETIME [not null]
+    "gcft_id" CHAR(32) [not null]
+    "snap_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gcft_id [name: "gcft_id_idx"]
-    snap_id [name: "snap_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gcft_id [name: "gcft_id_idx"]
+        snap_id [name: "snap_id_idx"]
+    }
 }
 
 Table "gcapidb"."gcft_snap_browserreport" {
-  "id" CHAR(32) [pk, not null]
-  "session_id" CHAR(32) [not null]
-  "browser" VARCHAR(255)
-  "browser_version" VARCHAR(255)
-  "platform" VARCHAR(255)
-  "platform_version" VARCHAR(255)
-  "desktop" TINYINT(1)
-  "tablet" TINYINT(1)
-  "mobile" TINYINT(1)
-  "city" VARCHAR(255)
-  "country" VARCHAR(255)
-  "state" VARCHAR(255)
-  "language" VARCHAR(255)
-  "visit_date" DATETIME [not null]
-  "gcft_id" CHAR(32) [not null]
-  "snap_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "session_id" CHAR(32) [not null]
+    "browser" VARCHAR(255)
+    "browser_version" VARCHAR(255)
+    "platform" VARCHAR(255)
+    "platform_version" VARCHAR(255)
+    "desktop" TINYINT(1)
+    "tablet" TINYINT(1)
+    "mobile" TINYINT(1)
+    "city" VARCHAR(255)
+    "country" VARCHAR(255)
+    "state" VARCHAR(255)
+    "language" VARCHAR(255)
+    "visit_date" DATETIME [not null]
+    "gcft_id" CHAR(32) [not null]
+    "snap_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gcft_id [name: "gcft_id_idx"]
-    snap_id [name: "snap_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gcft_id [name: "gcft_id_idx"]
+        snap_id [name: "snap_id_idx"]
+    }
 }
 
 Table "gcapidb"."gcft_snap_hotspotclick" {
-  "id" CHAR(32) [pk, not null]
-  "session_id" CHAR(32) [not null]
-  "reporting_id" CHAR(32)
-  "hotspot_type_name" VARCHAR(32)
-  "hotspot_content" LONGTEXT
-  "hotspot_icon_name" VARCHAR(255)
-  "hotspot_name" VARCHAR(255)
-  "hotspot_user_icon_name" VARCHAR(255)
-  "linked_snap_name" VARCHAR(255)
-  "snap_file_name" VARCHAR(255)
-  "icon_color" VARCHAR(32)
-  "bg_color" VARCHAR(32)
-  "text_color" VARCHAR(32)
-  "hotspot_update_date" DATETIME [not null]
-  "click_date" DATETIME [not null]
-  "gcft_id" CHAR(32) [not null]
-  "snap_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "session_id" CHAR(32) [not null]
+    "reporting_id" CHAR(32)
+    "hotspot_type_name" VARCHAR(32)
+    "hotspot_content" LONGTEXT
+    "hotspot_icon_name" VARCHAR(255)
+    "hotspot_name" VARCHAR(255)
+    "hotspot_user_icon_name" VARCHAR(255)
+    "linked_snap_name" VARCHAR(255)
+    "snap_file_name" VARCHAR(255)
+    "icon_color" VARCHAR(32)
+    "bg_color" VARCHAR(32)
+    "text_color" VARCHAR(32)
+    "hotspot_update_date" DATETIME [not null]
+    "click_date" DATETIME [not null]
+    "gcft_id" CHAR(32) [not null]
+    "snap_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gcft_id [name: "gcft_id_idx"]
-    snap_id [name: "snap_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gcft_id [name: "gcft_id_idx"]
+        snap_id [name: "snap_id_idx"]
+    }
 }
 
 Table "gcapidb"."gcft_snap_trafficsource" {
-  "id" CHAR(32) [pk, not null]
-  "session_id" CHAR(32) [not null]
-  "referrer" LONGTEXT [not null]
-  "utm_campaign" VARCHAR(255)
-  "utm_content" VARCHAR(255)
-  "utm_medium" VARCHAR(255)
-  "utm_source" VARCHAR(255)
-  "utm_term" VARCHAR(255)
-  "visit_date" DATETIME [not null]
-  "gcft_id" CHAR(32) [not null]
-  "snap_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "session_id" CHAR(32) [not null]
+    "referrer" VARCHAR(2048) [not null]
+    "utm_campaign" VARCHAR(255)
+    "utm_content" VARCHAR(255)
+    "utm_medium" VARCHAR(255)
+    "utm_source" VARCHAR(255)
+    "utm_term" VARCHAR(255)
+    "visit_date" DATETIME [not null]
+    "gcft_id" CHAR(32) [not null]
+    "snap_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gcft_id [name: "gcft_id_idx"]
-    snap_id [name: "snap_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gcft_id [name: "gcft_id_idx"]
+        snap_id [name: "snap_id_idx"]
+    }
 }
 
 Table "gcapidb"."gcft_snap_view" {
-  "id" CHAR(32) [pk, not null]
-  "session_id" CHAR(32) [not null]
-  "view_date" DATETIME [not null]
-  "gcft_id" CHAR(32) [not null]
-  "snap_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "session_id" CHAR(32) [not null]
+    "view_date" DATETIME [not null]
+    "gcft_id" CHAR(32) [not null]
+    "snap_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gcft_id [name: "gcft_id_idx"]
-    snap_id [name: "snap_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gcft_id [name: "gcft_id_idx"]
+        snap_id [name: "snap_id_idx"]
+    }
 }
 
 Table "gcapidb"."geocoord" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "address" VARCHAR(255) [pk, not null]
-  "latitude" FLOAT [not null]
-  "longitude" FLOAT [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "address" VARCHAR(255) [pk, not null]
+    "latitude" FLOAT [not null]
+    "longitude" FLOAT [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."go_a4" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "title" VARCHAR(255) [not null]
-  "measurement_id" CHAR(16) [pk, not null]
-  "property_id" CHAR(16) [not null]
-  "client_id" CHAR(32) [not null]
-  "website_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(255) [not null]
+    "measurement_id" CHAR(16) [pk, not null]
+    "property_id" CHAR(16) [not null]
+    "client_id" CHAR(32) [not null]
+    "website_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-    measurement_id [unique, name: "measurement_id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-    website_id [name: "website_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+        measurement_id [unique, name: "measurement_id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+        website_id [name: "website_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_a4_stream" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "title" VARCHAR(255) [not null]
-  "stream_id" CHAR(16) [pk, not null]
-  "ga4_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(255) [not null]
+    "stream_id" CHAR(16) [pk, not null]
+    "ga4_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-    stream_id [unique, name: "stream_id_UNIQUE"]
-    ga4_id [name: "ga4_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+        stream_id [unique, name: "stream_id_UNIQUE"]
+        ga4_id [name: "ga4_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_cloud" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "project_name" VARCHAR(255) [pk, not null]
-  "hashed_api_key" VARCHAR(64) [not null]
-  "hashed_project_id" VARCHAR(64) [not null]
-  "hashed_project_number" VARCHAR(64) [not null]
-  "hashed_service_account" VARCHAR(64) [not null]
-  "client_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "project_name" VARCHAR(255) [pk, not null]
+    "hashed_api_key" VARCHAR(64) [not null]
+    "hashed_project_id" VARCHAR(64) [not null]
+    "hashed_project_number" VARCHAR(64) [not null]
+    "hashed_service_account" VARCHAR(64) [not null]
+    "client_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-    project_name [unique, name: "project_name_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+        project_name [unique, name: "project_name_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."go_sc" {
-  "id" CHAR(32) [pk, not null]
-  "title" VARCHAR(255) [not null]
-  "client_id" CHAR(32) [not null]
-  "website_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(255) [not null]
+    "client_id" CHAR(32) [not null]
+    "website_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-    client_id [name: "client_id_idx"]
-    website_id [name: "website_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+        client_id [name: "client_id_idx"]
+        website_id [name: "website_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_sc_country" {
-  "id" CHAR(32) [pk, not null]
-  "keys" BLOB [not null]
-  "clicks" INT [not null]
-  "impressions" INT [not null]
-  "ctr" FLOAT [not null]
-  "position" FLOAT [not null]
-  "date_start" DATETIME [not null]
-  "date_end" DATETIME [not null]
-  "gsc_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "keys" BLOB [not null]
+    "clicks" INT [not null]
+    "impressions" INT [not null]
+    "ctr" FLOAT [not null]
+    "position" FLOAT [not null]
+    "date_start" DATETIME [not null]
+    "date_end" DATETIME [not null]
+    "gsc_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gsc_id [name: "gsc_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gsc_id [name: "gsc_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_sc_device" {
-  "id" CHAR(32) [pk, not null]
-  "keys" BLOB [not null]
-  "clicks" INT [not null]
-  "impressions" INT [not null]
-  "ctr" FLOAT [not null]
-  "position" FLOAT [not null]
-  "date_start" DATETIME [not null]
-  "date_end" DATETIME [not null]
-  "gsc_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "keys" BLOB [not null]
+    "clicks" INT [not null]
+    "impressions" INT [not null]
+    "ctr" FLOAT [not null]
+    "position" FLOAT [not null]
+    "date_start" DATETIME [not null]
+    "date_end" DATETIME [not null]
+    "gsc_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gsc_id [name: "gsc_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gsc_id [name: "gsc_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_sc_page" {
-  "id" CHAR(32) [pk, not null]
-  "keys" BLOB [not null]
-  "clicks" INT [not null]
-  "impressions" INT [not null]
-  "ctr" FLOAT [not null]
-  "position" FLOAT [not null]
-  "date_start" DATETIME [not null]
-  "date_end" DATETIME [not null]
-  "gsc_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "keys" BLOB [not null]
+    "clicks" INT [not null]
+    "impressions" INT [not null]
+    "ctr" FLOAT [not null]
+    "position" FLOAT [not null]
+    "date_start" DATETIME [not null]
+    "date_end" DATETIME [not null]
+    "gsc_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gsc_id [name: "gsc_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gsc_id [name: "gsc_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_sc_query" {
-  "id" CHAR(32) [pk, not null]
-  "keys" BLOB [not null]
-  "clicks" INT [not null]
-  "impressions" INT [not null]
-  "ctr" FLOAT [not null]
-  "position" FLOAT [not null]
-  "date_start" DATETIME [not null]
-  "date_end" DATETIME [not null]
-  "gsc_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "keys" BLOB [not null]
+    "clicks" INT [not null]
+    "impressions" INT [not null]
+    "ctr" FLOAT [not null]
+    "position" FLOAT [not null]
+    "date_start" DATETIME [not null]
+    "date_end" DATETIME [not null]
+    "gsc_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gsc_id [name: "gsc_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gsc_id [name: "gsc_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_sc_searchappearance" {
-  "id" CHAR(32) [pk, not null]
-  "keys" BLOB [not null]
-  "clicks" INT [not null]
-  "impressions" INT [not null]
-  "ctr" FLOAT [not null]
-  "position" FLOAT [not null]
-  "date_start" DATETIME [not null]
-  "date_end" DATETIME [not null]
-  "gsc_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "keys" BLOB [not null]
+    "clicks" INT [not null]
+    "impressions" INT [not null]
+    "ctr" FLOAT [not null]
+    "position" FLOAT [not null]
+    "date_start" DATETIME [not null]
+    "date_end" DATETIME [not null]
+    "gsc_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    gsc_id [name: "gsc_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        gsc_id [name: "gsc_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_ua" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "title" VARCHAR(255) [not null]
-  "tracking_id" CHAR(16) [pk, not null]
-  "client_id" CHAR(32) [not null]
-  "website_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(255) [not null]
+    "tracking_id" CHAR(16) [pk, not null]
+    "client_id" CHAR(32) [not null]
+    "website_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-    tracking_id [unique, name: "tracking_id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-    website_id [name: "website_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+        tracking_id [unique, name: "tracking_id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+        website_id [name: "website_id_idx"]
+    }
 }
 
 Table "gcapidb"."go_ua_view" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "title" VARCHAR(255) [not null]
-  "view_id" CHAR(16) [pk, not null]
-  "gua_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(255) [not null]
+    "view_id" CHAR(16) [pk, not null]
+    "gua_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-    view_id [unique, name: "view_id_UNIQUE"]
-    gua_id [name: "gua_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+        view_id [unique, name: "view_id_UNIQUE"]
+        gua_id [name: "gua_id_idx"]
+    }
 }
 
 Table "gcapidb"."ipaddress" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "address" VARCHAR(40) [pk, not null]
-  "isp" VARCHAR(255) [not null, default: "unknown"]
-  "location" TEXT [not null, default: "unknown"]
-  "geocoord_id" CHAR(32)
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "address" VARCHAR(40) [pk, not null]
+    "isp" VARCHAR(255) [not null, default: "unknown"]
+    "location" TEXT [not null, default: "unknown"]
+    "geocoord_id" CHAR(32)
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    address [unique, name: "address_UNIQUE"]
-    geocoord_id [name: "geocoord_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        address [unique, name: "address_UNIQUE"]
+        geocoord_id [name: "geocoord_id_idx"]
+    }
 }
 
 Table "gcapidb"."note" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "title" VARCHAR(96) [pk, not null]
-  "content" VARCHAR(255)
-  "user_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "title" VARCHAR(96) [pk, not null]
+    "description" TEXT(5000)
+    "user_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    title [unique, name: "title_UNIQUE"]
-    user_id [name: "user_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        title [unique, name: "title_UNIQUE"]
+        user_id [name: "user_id_idx"]
+    }
 }
 
 Table "gcapidb"."sharpspring" {
-  "id" CHAR(32) [pk, not null]
-  "hashed_api_key" VARCHAR(64) [not null]
-  "hashed_secret_key" VARCHAR(64) [not null]
-  "client_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "hashed_api_key" VARCHAR(64) [not null]
+    "hashed_secret_key" VARCHAR(64) [not null]
+    "client_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+    }
 }
 
 Table "gcapidb"."user" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "auth_id" VARCHAR(255) [pk, not null]
-  "username" VARCHAR(255) [not null]
-  "is_active" TINYINT(1) [not null, default: 1]
-  "is_verified" TINYINT(1) [not null, default: 0]
-  "is_superuser" TINYINT(1) [not null, default: 0]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "auth_id" VARCHAR(255) [pk, not null]
+    "email" VARCHAR(320) [not null]
+    "is_active" TINYINT(1) [not null, default: 1]
+    "is_verified" TINYINT(1) [not null, default: 0]
+    "is_superuser" TINYINT(1) [not null, default: 0]
+    "roles" JSON [not null, default: "[\"user\"]"]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    username [unique, name: "username_UNIQUE"]
-    auth_id [unique, name: "oauth_key_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        auth_id [unique, name: "oauth_key_UNIQUE"]
+        email [unique, name: "email_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."user_client" {
-  "id" CHAR(32) [pk, not null]
-  "client_id" CHAR(32) [not null]
-  "user_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "client_id" CHAR(32) [not null]
+    "user_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    client_id [name: "client_id_idx"]
-    user_id [name: "user_id_idx"]
-  }
+    Indexes {
+        (client_id, user_id) [pk]
+        id [unique, name: "id_UNIQUE"]
+        client_id [name: "client_id_idx"]
+        user_id [name: "user_id_idx"]
+    }
 }
 
 Table "gcapidb"."user_ipaddress" {
-  "id" CHAR(32) [pk, not null]
-  "ipaddress_id" CHAR(32) [not null]
-  "user_id" CHAR(32) [not null]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "ipaddress_id" CHAR(32) [not null]
+    "user_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    user_id [name: "user_id_idx"]
-    ipaddress_id [name: "ipaddress_id_idx"]
-  }
+    Indexes {
+        (ipaddress_id, user_id) [pk]
+        id [unique, name: "id_UNIQUE"]
+        user_id [name: "user_id_idx"]
+        ipaddress_id [name: "ipaddress_id_idx"]
+    }
 }
 
 Table "gcapidb"."website" {
-  "id" CHAR(32) [not null]
-  "created_on" DATETIME [not null, default: `now()`]
-  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
-  "domain" VARCHAR(255) [pk, not null]
-  "is_secure" TINYINT(1) [not null, default: 0]
+    "id" CHAR(32) [not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "domain" VARCHAR(255) [pk, not null]
+    "is_secure" TINYINT(1) [not null, default: 0]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    domain [unique, name: "domain_UNIQUE"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        domain [unique, name: "domain_UNIQUE"]
+    }
 }
 
 Table "gcapidb"."website_keywordcorpus" {
-  "id" CHAR(32) [pk, not null]
-  "corpus" BLOB [not null]
-  "rawtext" BLOB [not null]
-  "website_id" CHAR(32) [not null]
-  "page_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "corpus" LONGTEXT [not null]
+    "rawtext" LONGTEXT [not null]
+    "website_id" CHAR(32) [not null]
+    "page_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    website_id [name: "website_id_idx"]
-    page_id [name: "page_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        website_id [name: "website_id_idx"]
+        page_id [name: "page_id_idx"]
+    }
 }
 
 Table "gcapidb"."website_map" {
-  "id" CHAR(32) [pk, not null]
-  "url" VARCHAR(2048) [not null]
-  "website_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "url" VARCHAR(2048) [not null]
+    "website_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    website_id [name: "website_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        website_id [name: "website_id_idx"]
+    }
 }
 
 Table "gcapidb"."website_page" {
-  "id" CHAR(32) [pk, not null]
-  "url" VARCHAR(2048) [not null]
-  "status" INT [not null]
-  "priority" FLOAT [not null]
-  "last_modified" DATETIME
-  "change_frequency" VARCHAR(64)
-  "website_id" CHAR(32) [not null]
-  "sitemap_id" CHAR(32)
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "url" VARCHAR(2048) [not null]
+    "status" INT [not null]
+    "priority" FLOAT [not null]
+    "last_modified" DATETIME
+    "change_frequency" VARCHAR(64)
+    "website_id" CHAR(32) [not null]
+    "sitemap_id" CHAR(32)
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    website_id [name: "website_id_idx"]
-    sitemap_id [name: "sitemap_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        website_id [name: "website_id_idx"]
+        sitemap_id [name: "sitemap_id_idx"]
+    }
 }
 
 Table "gcapidb"."website_pagespeedinsights" {
-  "id" CHAR(32) [pk, not null]
-  "strategy" VARCHAR(16) [not null]
-  "ps_weight" INT [not null, default: 100]
-  "ps_grade" FLOAT [not null, default: 0]
-  "ps_value" VARCHAR(4) [not null, default: "0%"]
-  "ps_unit" VARCHAR(16) [not null, default: "percent"]
-  "fcp_weight" INT [not null, default: 10]
-  "fcp_grade" FLOAT [not null, default: 0]
-  "fcp_value" FLOAT [not null, default: 0]
-  "fcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
-  "lcp_weight" INT [not null, default: 25]
-  "lcp_grade" FLOAT [not null, default: 0]
-  "lcp_value" FLOAT [not null, default: 0]
-  "lcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
-  "cls_weight" INT [not null, default: 15]
-  "cls_grade" FLOAT [not null, default: 0]
-  "cls_value" FLOAT [not null, default: 0]
-  "cls_unit" VARCHAR(16) [not null, default: "unitless"]
-  "si_weight" INT [not null, default: 10]
-  "si_grade" FLOAT [not null, default: 0]
-  "si_value" FLOAT [not null, default: 0]
-  "si_unit" VARCHAR(16) [not null, default: "miliseconds"]
-  "tbt_weight" INT [not null, default: 30]
-  "tbt_grade" FLOAT [not null, default: 0]
-  "tbt_value" FLOAT [not null, default: 0]
-  "tbt_unit" VARCHAR(16) [not null, default: "miliseconds"]
-  "website_id" CHAR(32) [not null]
-  "page_id" CHAR(32) [not null]
+    "id" CHAR(32) [pk, not null]
+    "created_on" DATETIME [not null, default: `now()`]
+    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+    "strategy" VARCHAR(16) [not null]
+    "ps_weight" INT [not null, default: 100]
+    "ps_grade" FLOAT [not null, default: 0]
+    "ps_value" VARCHAR(4) [not null, default: "0%"]
+    "ps_unit" VARCHAR(16) [not null, default: "percent"]
+    "fcp_weight" INT [not null, default: 10]
+    "fcp_grade" FLOAT [not null, default: 0]
+    "fcp_value" FLOAT [not null, default: 0]
+    "fcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
+    "lcp_weight" INT [not null, default: 25]
+    "lcp_grade" FLOAT [not null, default: 0]
+    "lcp_value" FLOAT [not null, default: 0]
+    "lcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
+    "cls_weight" INT [not null, default: 15]
+    "cls_grade" FLOAT [not null, default: 0]
+    "cls_value" FLOAT [not null, default: 0]
+    "cls_unit" VARCHAR(16) [not null, default: "unitless"]
+    "si_weight" INT [not null, default: 10]
+    "si_grade" FLOAT [not null, default: 0]
+    "si_value" FLOAT [not null, default: 0]
+    "si_unit" VARCHAR(16) [not null, default: "miliseconds"]
+    "tbt_weight" INT [not null, default: 30]
+    "tbt_grade" FLOAT [not null, default: 0]
+    "tbt_value" FLOAT [not null, default: 0]
+    "tbt_unit" VARCHAR(16) [not null, default: "miliseconds"]
+    "website_id" CHAR(32) [not null]
+    "page_id" CHAR(32) [not null]
 
-  Indexes {
-    id [unique, name: "id_UNIQUE"]
-    website_id [name: "website_id_idx"]
-    page_id [name: "page_id_idx"]
-  }
+    Indexes {
+        id [unique, name: "id_UNIQUE"]
+        website_id [name: "website_id_idx"]
+        page_id [name: "page_id_idx"]
+    }
 }
 
 Ref "client_id":"gcapidb"."client"."id" < "gcapidb"."bdx_feed"."client_id" [update: no action, delete: no action]
 
 Ref "client_id":"gcapidb"."client"."id" < "gcapidb"."client_bucket"."client_id" [update: no action, delete: no action]
+
+Ref "client_report_id":"gcapidb"."client_report"."id" < "gcapidb"."client_report_note"."client_report_id" [update: no action, delete: no action]
+
+Ref "note_id":"gcapidb"."note"."id" < "gcapidb"."client_report_note"."note_id" [update: no action, delete: no action]
 
 Ref "client_id":"gcapidb"."client"."id" < "gcapidb"."client_website"."client_id" [update: no action, delete: no action]
 
