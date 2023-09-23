@@ -32,7 +32,8 @@ one another; it aims to answer the following questions for each:
     <dt>indigo</dt>
     <dd>website analytics and search console data:
     <br/>GoogleSearchConsole, GSCCountry, GSCDevice, GSCPage, GSCQuery,
-    GSCSearchappearance, GoogleAnalytics4, GA4Steam, GoogleUniversalAnalytics, GUAView</dd>
+    GSCSearchappearance, GoogleAnalytics4, GA4Steam, GoogleUniversalAnalytics,
+    GUAView</dd>
     <dt>orange</dt>
     <dd>GC Fly Tours and GCFT analytics data:
     <br/>GCFlyTour, GCFTSnap, GCFTSnapView, GCFTSnapActiveduration,
@@ -55,8 +56,13 @@ one another; it aims to answer the following questions for each:
       - [Permission: Update User](#permission-update-user)
       - [Permission: Delete User](#permission-delete-user)
     - [Ipaddress](#ipaddress)
+      - [Permission: CRUD Ipaddress](#permission-crud-ipaddress)
     - [User Ipaddress](#user-ipaddress)
     - [Note](#note)
+      - [Permission: Create Note](#permission-create-note)
+      - [Permission: Read Note](#permission-read-note)
+      - [Permission: Update Note](#permission-update-note)
+      - [Permission: Delete Note](#permission-delete-note)
     - [Client](#client)
       - [Permission: Create Client](#permission-create-client)
       - [Permission: Read Client](#permission-read-client)
@@ -119,7 +125,7 @@ For the sake of being brief, all tables adopt the following base model. The
         }
     }
 
-The user data model is essential in determining the privileges that users have,
+The `user` data model is essential in determining the privileges that users have,
 and by extension what data they are authorized to access through the API.
 
 As described in the previous sections, the Authentication will be handled by
@@ -137,46 +143,47 @@ is_superuser.
 
 #### Permission: User Me (i.e. Current User)
 
-- there is no API endpoint to CREATE an authenticated user
+- there is no API endpoint to *CREATE* a new user
   - only people with credentials to the Auth0 account can manually create
     a new user in the authentication database
 - any user may register and login to the authentication database
-- after a user’s first authenticated, their privileges are created
-  in the application database
-  - by default all new users are assigned the role=user
-  - by default all new user have the flag is_active=True
-  - by default all new user have the flag is_verified=False
-  - by default all new user have the flag is_superuser=False
+  - all new users must verify their email address before they can login
+- after a user’s first authenticated, application will *CREATE* the user in
+  the application database
+  - by default all new users are assigned the `role=user`
+  - by default all new user have the flag `is_active=True`
+  - by default all new user have the flag `is_verified=False`
+  - by default all new user have the flag `is_superuser=False`
 
 #### Permission: Read User
 
-- a user can READ their own user data
-- a user can see certain privilege flags depending on the user’s role
-  - role=admin can see all flags, including is_superuser
-  - role=manager|client|employee can only see is_active and is_verified
+- a user can *READ* their own user data
+- a user may *READ* certain privilege flags depending on the user’s role
+  - `role=admin` can see all flags, including `is_superuser`
+  - `role=manager`|client|employee can only see `is_active` and `is_verified`
 
 #### Permission: Update User
 
-- a user can UPDATE limited fields of their own data
-  - a user can UPDATE their flag is_verified=True by validating a verification
-    token provided through an email
-  - a user can have their flag is_verified UPDATEd, if the Auth0 authentication
-    database provides an alternate value
-- users with role=manager can UPDATE the:
-  - role of other users with role=client|employee|user,
-    but not to role=admin
-  - flags of users with role==client|employee|user,
-    but cannot set the flag is_superuser=True
-- only users with role=admin can UPDATE user privileges without restriction
-  - assign any user the role=admin
+- a user can *UPDATE* limited fields of their own data
+  - a user can *UPDATE* their flag `is_verified=True` by validating a
+  verification token provided through an email
+  - a user can have their flag `is_verified` *UPDATE*, if the Auth0
+  authentication database provides an alternate value
+- users with `role=manager` can *UPDATE* the:
+  - role of other users with `role=client`|employee|user,
+    but not to `role=admin`
+  - flags of users with `role=client|employee|user`,
+    but cannot set the flag `is_superuser=True`
+- only users with `role=admin` can *UPDATE* user privileges without restriction
+  - assign any user the `role=admin`
   - update any flag of any user
-- only one user can have flag is_superuser=True (the admin 👑 of admin ⚔️)
-  - only user with flag is_superuser can relinquish their administrative-admin
+- only one user can have flag `is_superuser=True` (the admin 👑 of admin ⚔️)
+  - only user with flag `is_superuser` can relinquish their administrative-admin
     role to one other user in the application database
 
 #### Permission: Delete User
 
-- only users with role=admin can DELETE users
+- only users with `role=admin` can *DELETE* users
 
 ### Ipaddress
 
@@ -192,6 +199,11 @@ is_superuser.
         }
     }
 
+#### Permission: CRUD Ipaddress
+
+- There are no public endpoints available to create, read, update, or delete
+  `ipaddress` data. Only users with `role=admin` can access this data.
+
 ### User Ipaddress
 
     Table "gcapidb"."user_ipaddress" {
@@ -206,6 +218,9 @@ is_superuser.
         }
     }
 
+- There are no public endpoints available to create, read, update, or delete
+  `user_ipaddress` data. Only users with `role=admin` can access this data.
+
 ### Note
 
     Table "gcapidb"."note" {
@@ -218,6 +233,30 @@ is_superuser.
             user_id [name: "user_id_idx"]
         }
     }
+
+#### Permission: Create Note
+
+- any user can *CREATE* a new note
+  - notes are assigned to one user
+
+#### Permission: Read Note
+
+- any user can *READ* their own notes
+- users with `role=manager` can *READ* notes of users with
+  `role=client|employee`
+- only users with `role=admin` can *READ* notes of any users
+
+#### Permission: Update Note
+
+- any user can *UPDATE* their own notes
+- only users with `role=admin` can *UPDATE* notes of any users
+
+#### Permission: Delete Note
+
+- any user can *DELETE* their own notes
+- users with `role=manager` can *DELETE* notes of users with
+  `role=client|employee`
+- only users with `role=admin` can *DELETE* notes of any users
 
 ### Client
 

@@ -7,7 +7,7 @@
     - [Authorization: Resource Data Models and Permissions](#authorization-resource-data-models-and-permissions)
     - [Authorizaion: User Roles and Privileges](#authorizaion-user-roles-and-privileges)
     - [Authentication and Authorization Flow](#authentication-and-authorization-flow)
-  - [Testing Tools](#testing-tools)
+  - [Security Testing Tools](#security-testing-tools)
     - [GitLeaks](#gitleaks)
       - [References](#references)
 
@@ -16,6 +16,9 @@
 This project is not open for vulnerability reports. We DO NOT recommend using
 this in production—it is only a test development project. We will not fix
 vulnerabilities until this project get's pushed into production.
+
+Contact the [Get Community, Inc. Web Team](mailto:joey@getcommunity.com)
+for more information.
 
 ## Generate App Secrets
 
@@ -46,37 +49,67 @@ depending on their ability to access the requested information. First, the API
 layer will define specific permissions that are required to access specific
 pieces of data.
 
-**Permissions** are any action that may be taken on the data resource. Permissions are tied directly to the piece of data that a user is requesting and should describe the properties of the data. Privileges are specific permissions that are assigned to a particular user. When a user makes an API request to create, read, update, or delete data, first the API checks the data permissions and then it verifies if the user has the privilege to take the desired action. Defining clear data permissions and rules for how users are granted the privilege to access data is critical for securing data therein.
+**Permissions** are any action that may be taken on the data resource.
+Permissions are tied directly to the piece of data that a user is requesting
+and should describe the properties of the data. Privileges are specific
+permissions that are assigned to a particular user. When a user makes an API
+request to create, read, update, or delete data, first the API checks the data
+permissions and then it verifies if the user has the privilege to take the
+desired action. Defining clear data permissions and rules for how users are
+granted the privilege to access data is critical for securing data therein.
 
-- **Users** are able to login through a browser **Client** to request and access a **Resource** on the **API**.
-- The **Client** is a web or mobile browser based interface by which the **User** interacts with the **API**.
-- **Authentication** is the primary process of verifying the existance and identity of an individual user—conducted on the authorization server.
-- **Authorization** (**Permissions**) is a secondary process of confirming whether or not an authenticated user is capabile of accessing the resource in the request.
-- **User Permissions** are stored in the user table in the scopes column of the databse.
-- A **Resource** is a piece of data that is stored in the database. A **Resource** is any data that can be created, read, updated, or deleted by a user.
+- **Users** are able to login through a browser **Client** to request and
+access a **Resource** on the **API**.
+- The **Client** is a web or mobile browser based interface by which the
+**User** interacts with the **API**.
+- **Authentication** is the primary process of verifying the existance and
+identity of an individual user—conducted on the authorization server.
+- **Authorization** (**Permissions**) is a secondary process of confirming
+whether or not an authenticated user is capabile of accessing the resource
+in the request.
+- **User Privileges** are determined by user `role` column in the `users`
+table of the databse.
+- A **Resource** is a piece of data that is stored in the database.
+A **Resource** is any data that can be created, read, updated, or
+deleted by a user.
 
 ### Authorization: Resource Data Models and Permissions
 
-The web team documented the Resource Data Models and Permissions on GitHub. Please refer to the [SQL README.md file](https://github.com/joeygrable94/GCAPI/blob/main/sql/README.md) for a detailed outline of all the data models and the permissions associated with each.
+The web team documented the Resource Data Models and Permissions on GitHub.
+Please refer to the [SQL README.md file](https://github.com/joeygrable94/GCAPI/blob/main/sql/README.md)
+for a detailed outline of all the data models and the permissions associated
+with each.
 
-- Each data model typically has 4 default actions: CREATE, READ, UPDATE, and DELETE (i.e. CRUD operations).
+- Each data model typically has 4 default actions: CREATE, READ, UPDATE,
+and DELETE (i.e. CRUD operations).
 - Each data model permission is granted through a specific set of rules.
 - If a user meets the permissions required they may be granted access to the data.
-- Additional constraints are placed on users depending on what roles are assigned to them.
+- Additional constraints are placed on users depending on what roles are
+assigned to them.
 
 ### Authorizaion: User Roles and Privileges
 
-Privileges are granted to users through the `role` assigned to the user. By default as soon as a new user registers, they are automatically assigned to the role of “user”. After a verification process, admins are able to grant different roles to specific users depending on their affiliation. There are 5 roles available to be assigned to users:
+Privileges are granted to users through the `role` assigned to the user. By
+default as soon as a new user registers, they are automatically assigned to the
+role of “user”. After a verification process, admins are able to grant
+different roles to specific users depending on their affiliation. There are 5
+roles available to be assigned to users:
 
-`admin` — GC Administrators can act on all aspects of the application, in particular, they control the privileges granted to other users (i.e. which users can access which clients' data)
+`admin` — GC Administrators can act on all aspects of the application, in
+particular, they control the privileges granted to other users (i.e. which
+users can access which clients' data)
 
-`manager` — GC Managers, can act on all of the client data that they are granted access to. Managers can also grant limited privileges to other users to act on client data
+`manager` — GC Managers, can act on all of the client data that they are
+granted access to. Managers can also grant limited privileges to other users
+to act on client data
 
 `client` — GC Clients can access and act on their own data
 
-`employee` — GC Employees have essential access to review and add insights to clients they are granted access to.
+`employee` — GC Employees have essential access to review and add insights
+to clients they are granted access to.
 
-`user` — Registered Users are unassociated with any GC Role or Client and have minimal access.
+`user` — Registered Users are unassociated with any GC Role or Client
+and have minimal access.
 
 ### Authentication and Authorization Flow
 
@@ -117,7 +150,7 @@ sequenceDiagram
     API->>Resource: Fetch Requested Resource
     Resource-->>Client: Protected Resource
     Client->>API: Request Resource + BAD Access Token
-    Note over Client,Resource: If Access Token Abuse: Revoked Tokens
+    Note over Client,Resource: If Access Token Abuse: Revoke Tokens
     API-->>Client: Invalid Token Error
     loop Permissions
         API-->>Permissions: Revoke Tokens
@@ -133,7 +166,7 @@ sequenceDiagram
 
 ----
 
-## Testing Tools
+## Security Testing Tools
 
 ### GitLeaks
 
