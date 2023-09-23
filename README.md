@@ -1,85 +1,27 @@
-# GCAPI Stack
+# GCAPI Application
 
-## Table of Contents
-
-- [GCAPI Stack](#gcapi-stack)
-  - [Table of Contents](#table-of-contents)
-  - [Getting Starting](#getting-starting)
-    - [Building the Container](#building-the-container)
-  - [The Full Stack](#the-full-stack)
-    - [Backend](#backend)
-      - [Alembic Database Migration](#alembic-database-migration)
+- [GCAPI Application](#gcapi-application)
+  - [AWS Infrastructure](#aws-infrastructure)
+  - [Technology Stack](#technology-stack)
+  - [Backend](#backend)
   - [Frontend](#frontend)
   - [End-to-End Testing](#end-to-end-testing)
 
----
+## AWS Infrastructure
 
-## Getting Starting
+![Insfratructure Diagram](./docs/img/gcapi-aws-infrastructure-3d.png)
 
-Generate App Secrets
+## Technology Stack
 
-Use `openssl rand -hex 32` to generate a secret key.
+![Technology Stack Diagram](./docs/img/stack.png)
 
-Use the base `example.env` file to create a local development `.env` file.
+## Backend
 
-### Building the Container
-
-Build the container and start descretely.
-
-    docker compose up --build -d
-
-If the image is already built, start the container descretely
-
-    docker compose up -d
-
-If breaking changes are introduced, a force recreate may be needed, and remove any orphans to keep the system lean.
-
-    docker compose up --build --force-recreate --remove-orphans -d
-
----
-
-## The Full Stack
-
-This GCAPI stack is based off the following [Stack Template FastAPI-PostgreSQL, by @Tiangolo on GitHub](https://github.com/tiangolo/full-stack-fastapi-postgresql/blob/master/%7B%7Bcookiecutter.project_slug%7D%7D/README.md).
-
----
-
-### Backend
-
-- [GCAPI OpenAPI Schema](http://localhost:8888/api/v1/docs/openapi.json)
-- [GCAPI Swagger UI Documentation](http://localhost:8888/api/v1/docs)
-- [GCAPI ReDoc Alternate UI Documentation](http://localhost:8888/api/v1/redoc)
-
-#### Alembic Database Migration
-
-Check current db version.
-
-`docker compose exec backend bash`
-`docker compose run backend alembic revision --autogenerate -m "initial db state"`
-
-`docker compose run backend alembic current`
-
-After changing db models/tables, run revision, and autogenerate.
-Always add a message about what changed in the db models/tables.
-
-    docker compose run backend alembic revision --autogenerate -m "added table ____"
-    docker compose run backend alembic revision --autogenerate -m "updated accesstoken token_jti column"
-
-To upgrade or downgrade the container database version.
-
-    docker compose run backend alembic stamp head
-    docker compose run backend alembic upgrade head
-    docker compose run backend alembic upgrade +1
-    docker compose run backend alembic downgrade -1
-    docker compose run backend alembic downgrade base
-
----
+- [GCAPI-backend](https://github.com/joeygrable94/GCAPI-backend)
 
 ## Frontend
 
-- Home Page: [http://localhost:3000](http://localhost:3000) or [http://localhost](http://localhost)
-
----
+- [GCAPI-frontend](https://github.com/joeygrable94/GCAPI-frontend)
 
 ## End-to-End Testing
 

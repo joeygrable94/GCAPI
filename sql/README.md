@@ -1,17 +1,52 @@
-# GCAPI: Data Models and Permissions
+# GCAPI: Resource Data Models and Permissions
 
-The GC Client Data Portal contains a few core data models with the ability to grow and scale. Below is an outline of the data models and how they relate to one another; it aims to answer the following questions for each:
+The GC Client Data Portal contains a few core data models with the ability to
+grow and scale. Below is an outline of the data models and how they relate to
+one another; it aims to answer the following questions for each:
 
 - What data is being modeled?
 - Where is the data stored?
-- How should the data be formatted in its storage location; data type, size, and validation?
+- How should the data be formatted in its storage location
+  - data type, size, and validation?
 - Why is the data valuable or significant?
 - Who has access to the data?
 - When can users create, read, update, or delete the data?
 
+## Schema Diagram
+
+![schema-diagram.png](./schema-diagram.png)
+
+<dl>
+    <dt>blue</dt>
+    <dd>client-specific data:<br/>Client</dd>
+    <dt>green</dt>
+    <dd>user-specific data:
+    <br/>User, Ipaddress, Note, UserIpaddress, UserClient</dd>
+    <dt>violet</dt>
+    <dd>third-party API key/connection data:
+    <br/>GoogleCloud, Sharpspring, BDXFeed</dd>
+    <dt>pink</dt>
+    <dd>website data:
+    <br/>Website, WebsiteMap, WebsitePage, WebsiteKeywordcorpus,
+    WebsitePagespeedinsights, ClientWebsite</dd>
+    <dt>indigo</dt>
+    <dd>website analytics and search console data:
+    <br/>GoogleSearchConsole, GSCCountry, GSCDevice, GSCPage, GSCQuery,
+    GSCSearchappearance, GoogleAnalytics4, GA4Steam, GoogleUniversalAnalytics, GUAView</dd>
+    <dt>orange</dt>
+    <dd>GC Fly Tours and GCFT analytics data:
+    <br/>GCFlyTour, GCFTSnap, GCFTSnapView, GCFTSnapActiveduration,
+    GCFTSnapHotspotclick, GCFTSnapTrafficsource, GCFTSnapBrowserreport</dd>
+    <dt>brown</dt>
+    <dd>AWS S3 bucket storage and file data:<br/>ClientBucket, FileAsset</dd>
+    <dt>black</dt>
+    <dd>application worker tasks/services:<br/>GeoCoord</dd>
+</dl>
+
 ## Data Models
 
-- [GCAPI: Data Models and Permissions](#gcapi-data-models-and-permissions)
+- [GCAPI: Resource Data Models and Permissions](#gcapi-resource-data-models-and-permissions)
+  - [Schema Diagram](#schema-diagram)
   - [Data Models](#data-models)
     - [Base Model](#base-model)
     - [User](#user)
@@ -65,7 +100,8 @@ The GC Client Data Portal contains a few core data models with the ability to gr
         }
     }
 
-For the sake of being brief, all tables adopt the following base model. The “id” field is the primary value used in lookups for any associated data models.
+For the sake of being brief, all tables adopt the following base model. The
+“id” field is the primary value used in lookups for any associated data models.
 
 ### User
 
@@ -83,18 +119,30 @@ For the sake of being brief, all tables adopt the following base model. The “i
         }
     }
 
-The user data model is essential in determining the privileges that users have, and by extension what data they are authorized to access through the API.
+The user data model is essential in determining the privileges that users have,
+and by extension what data they are authorized to access through the API.
 
-As described in the previous sections, the Authentication will be handled by the Auth0 database server and therefore our application database will not store any passwords. The application database will only store information about the privileges granted to the user and minimal personal info. NO credentials unique to the user will be stored on the application database. The only personal information stored on the application database is the email address and this field cannot be updated by any user. The auth_id field is a unique identifier provided by the authentication database and cannot be changed by any user.
+As described in the previous sections, the Authentication will be handled by
+the Auth0 database server and therefore our application database will not store
+any passwords. The application database will only store information about the
+privileges granted to the user and minimal personal info. NO credentials unique
+to the user will be stored on the application database. The only personal
+information stored on the application database is the email address and this
+field cannot be updated by any user. The auth_id field is a unique identifier
+provided by the authentication database and cannot be changed by any user.
 
-The user privileges are predominantly controlled by the role field in the database. The user data model includes a few flags: is_active, is_verified, is_superuser.
+The user privileges are predominantly controlled by the role field in the
+database. The user data model includes a few flags: is_active, is_verified,
+is_superuser.
 
 #### Permission: User Me (i.e. Current User)
 
 - there is no API endpoint to CREATE an authenticated user
-  - only people with credentials to the Auth0 account can manually create a new user in the authentication database
+  - only people with credentials to the Auth0 account can manually create
+    a new user in the authentication database
 - any user may register and login to the authentication database
-- after a user’s first authenticated, their privileges are created in the application database
+- after a user’s first authenticated, their privileges are created
+  in the application database
   - by default all new users are assigned the role=user
   - by default all new user have the flag is_active=True
   - by default all new user have the flag is_verified=False
@@ -110,16 +158,21 @@ The user privileges are predominantly controlled by the role field in the databa
 #### Permission: Update User
 
 - a user can UPDATE limited fields of their own data
-  - a user can UPDATE their flag is_verified=True by validating a verification token provided through an email
-  - a user can UPDATE their flag is_verified, if the Auth0 authentication database provides an alternate value
+  - a user can UPDATE their flag is_verified=True by validating a verification
+    token provided through an email
+  - a user can have their flag is_verified UPDATEd, if the Auth0 authentication
+    database provides an alternate value
 - users with role=manager can UPDATE the:
-  - role of other users with role=client|employee|user, but not to role=admin
-  - flags of users with role==client|employee|user, but cannot set the flag is_superuser=True
+  - role of other users with role=client|employee|user,
+    but not to role=admin
+  - flags of users with role==client|employee|user,
+    but cannot set the flag is_superuser=True
 - only users with role=admin can UPDATE user privileges without restriction
   - assign any user the role=admin
   - update any flag of any user
-- only one user can have flag is_superuser=True (the admin 👑of admin ⚔️)
-  - only user with flag is_superuser can relinquish their administrative-admin role to one other user in the application database
+- only one user can have flag is_superuser=True (the admin 👑 of admin ⚔️)
+  - only user with flag is_superuser can relinquish their administrative-admin
+    role to one other user in the application database
 
 #### Permission: Delete User
 
@@ -354,40 +407,40 @@ The user privileges are predominantly controlled by the role field in the databa
 
 ### Website Page Speed Insight
 
-Table "gcapidb"."website_pagespeedinsights" {
-    "strategy" VARCHAR(16) [not null]
-    "ps_weight" INT [not null, default: 100]
-    "ps_grade" FLOAT [not null, default: 0]
-    "ps_value" VARCHAR(4) [not null, default: "0%"]
-    "ps_unit" VARCHAR(16) [not null, default: "percent"]
-    "fcp_weight" INT [not null, default: 10]
-    "fcp_grade" FLOAT [not null, default: 0]
-    "fcp_value" FLOAT [not null, default: 0]
-    "fcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
-    "lcp_weight" INT [not null, default: 25]
-    "lcp_grade" FLOAT [not null, default: 0]
-    "lcp_value" FLOAT [not null, default: 0]
-    "lcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
-    "cls_weight" INT [not null, default: 15]
-    "cls_grade" FLOAT [not null, default: 0]
-    "cls_value" FLOAT [not null, default: 0]
-    "cls_unit" VARCHAR(16) [not null, default: "unitless"]
-    "si_weight" INT [not null, default: 10]
-    "si_grade" FLOAT [not null, default: 0]
-    "si_value" FLOAT [not null, default: 0]
-    "si_unit" VARCHAR(16) [not null, default: "miliseconds"]
-    "tbt_weight" INT [not null, default: 30]
-    "tbt_grade" FLOAT [not null, default: 0]
-    "tbt_value" FLOAT [not null, default: 0]
-    "tbt_unit" VARCHAR(16) [not null, default: "miliseconds"]
-    "website_id" CHAR(32) [not null]
-    "page_id" CHAR(32) [not null]
+    Table "gcapidb"."website_pagespeedinsights" {
+        "strategy" VARCHAR(16) [not null]
+        "ps_weight" INT [not null, default: 100]
+        "ps_grade" FLOAT [not null, default: 0]
+        "ps_value" VARCHAR(4) [not null, default: "0%"]
+        "ps_unit" VARCHAR(16) [not null, default: "percent"]
+        "fcp_weight" INT [not null, default: 10]
+        "fcp_grade" FLOAT [not null, default: 0]
+        "fcp_value" FLOAT [not null, default: 0]
+        "fcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
+        "lcp_weight" INT [not null, default: 25]
+        "lcp_grade" FLOAT [not null, default: 0]
+        "lcp_value" FLOAT [not null, default: 0]
+        "lcp_unit" VARCHAR(16) [not null, default: "miliseconds"]
+        "cls_weight" INT [not null, default: 15]
+        "cls_grade" FLOAT [not null, default: 0]
+        "cls_value" FLOAT [not null, default: 0]
+        "cls_unit" VARCHAR(16) [not null, default: "unitless"]
+        "si_weight" INT [not null, default: 10]
+        "si_grade" FLOAT [not null, default: 0]
+        "si_value" FLOAT [not null, default: 0]
+        "si_unit" VARCHAR(16) [not null, default: "miliseconds"]
+        "tbt_weight" INT [not null, default: 30]
+        "tbt_grade" FLOAT [not null, default: 0]
+        "tbt_value" FLOAT [not null, default: 0]
+        "tbt_unit" VARCHAR(16) [not null, default: "miliseconds"]
+        "website_id" CHAR(32) [not null]
+        "page_id" CHAR(32) [not null]
 
-    Indexes {
-        website_id [name: "website_id_idx"]
-        page_id [name: "page_id_idx"]
+        Indexes {
+            website_id [name: "website_id_idx"]
+            page_id [name: "page_id_idx"]
+        }
     }
-}
 
 ### Website Keyword Corpus
 
