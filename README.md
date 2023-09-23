@@ -6,14 +6,10 @@
   - [Table of Contents](#table-of-contents)
   - [Getting Starting](#getting-starting)
     - [Building the Container](#building-the-container)
-- [The Full Stack](#the-full-stack)
-  - [Backend](#backend)
-    - [FastAPI \& Auth0](#fastapi--auth0)
-    - [OpenAPI Documentation](#openapi-documentation)
-    - [Database Object Relation Mapping](#database-object-relation-mapping)
-    - [Alembic Database Migration](#alembic-database-migration)
+  - [The Full Stack](#the-full-stack)
+    - [Backend](#backend)
+      - [Alembic Database Migration](#alembic-database-migration)
   - [Frontend](#frontend)
-    - [OpenAPI Typescript Client Generation](#openapi-typescript-client-generation)
   - [End-to-End Testing](#end-to-end-testing)
 
 ---
@@ -22,7 +18,7 @@
 
 Generate App Secrets
 
-    Use `openssl rand -hex 32` to generate a secret key.
+Use `openssl rand -hex 32` to generate a secret key.
 
 Use the base `example.env` file to create a local development `.env` file.
 
@@ -42,34 +38,19 @@ If breaking changes are introduced, a force recreate may be needed, and remove a
 
 ---
 
-# The Full Stack
+## The Full Stack
 
 This GCAPI stack is based off the following [Stack Template FastAPI-PostgreSQL, by @Tiangolo on GitHub](https://github.com/tiangolo/full-stack-fastapi-postgresql/blob/master/%7B%7Bcookiecutter.project_slug%7D%7D/README.md).
 
 ---
 
-## Backend
-
-### FastAPI & Auth0
-
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [FastAPI - Authentication](https://fastapi.tiangolo.com/tutorial/security/)
-- [FastAPI - OAuth2 with Password](https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt/)
-- [FastAPI - OAuth0 with Auth0 - GitHub](https://github.com/dorinclisu/fastapi-auth0)
-- [Complete tutorial using auth0.com with FastAPI](https://www.youtube.com/watch?v=cGRdFjgAy9s)
-
-### OpenAPI Documentation
+### Backend
 
 - [GCAPI OpenAPI Schema](http://localhost:8888/api/v1/docs/openapi.json)
 - [GCAPI Swagger UI Documentation](http://localhost:8888/api/v1/docs)
 - [GCAPI ReDoc Alternate UI Documentation](http://localhost:8888/api/v1/redoc)
 
-### Database Object Relation Mapping
-
-- [SQLAlchemy 1.4 ORM with FastAPI WalkThrough](https://rogulski.it/blog/sqlalchemy-14-async-orm-with-fastapi/)
-- [FastAPI SQLAlchemy Async DB Example Config](https://rogulski.it/blog/fastapi-async-db/)
-
-### Alembic Database Migration
+#### Alembic Database Migration
 
 Check current db version.
 
@@ -96,10 +77,7 @@ To upgrade or downgrade the container database version.
 
 ## Frontend
 
-### OpenAPI Typescript Client Generation
-
-- This is a great introduction tutorial on [FastAPI OpenAPI Frontend Client Generation](https://fastapi.tiangolo.com/advanced/generate-clients/)
-- [OpenAPI Frontend Client Generator](https://github.com/ferdikoomen/openapi-typescript-codegen) provides amazing frontend tooling that generates a typescript OpenAPI model based on any OpenAPI JSON schema.
+- Home Page: [http://localhost:3000](http://localhost:3000) or [http://localhost](http://localhost)
 
 ---
 

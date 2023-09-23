@@ -6,12 +6,10 @@
   - [Table of Contents](#table-of-contents)
   - [Supported Versions](#supported-versions)
   - [Reporting a Vulnerability](#reporting-a-vulnerability)
-- [Security Policy](#security-policy)
   - [Getting Starting](#getting-starting)
   - [Testing Tools](#testing-tools)
     - [GitLeaks](#gitleaks)
       - [References](#references)
-  - [References](#references-1)
 
 ## Supported Versions
 
@@ -22,8 +20,6 @@
 ## Reporting a Vulnerability
 
 This project is not open for vulnerability reports. We DO NOT recommend using this in production—it is only a test development project. We will not fix vulnerabilities until this project get's pushed into production.
-
-# Security Policy
 
 ## Getting Starting
 
@@ -42,10 +38,5 @@ Generate App Secrets
 - [GitLeaks Repository](https://github.com/zricethezav/gitleaks)
 - [GitLeaks Allow List for Inline Cases of False Positive Secrets Leak](https://github.com/zricethezav/gitleaks/issues/579)
 - [GitLeaks Custom Config .toml File](https://github.com/zricethezav/gitleaks/issues/787)
-
----
-
-## References
-
 - [How to Maintain a Secure Repository](https://docs.microsoft.com/en-us/learn/modules/maintain-secure-repository-github/2-how-to-maintain-secure-repository)
 - [Removing Secrets from Your Git History](https://gist.github.com/gjerokrsteski/e4a10352448158ba827493eb116cda51)
