@@ -19,6 +19,7 @@ Table "gcapidb"."client" {
     "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
     "title" VARCHAR(96) [pk, not null]
     "description" TEXT(5000)
+    "is_active" TINYINT(1) [not null, default: 1]
 
     Indexes {
         id [unique, name: "id_UNIQUE"]

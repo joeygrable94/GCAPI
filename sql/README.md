@@ -10,7 +10,7 @@ one another; it aims to answer the following questions for each:
   - data type, size, and validation?
 - Why is the data valuable or significant?
 - Who has access to the data?
-- When can users create, read, update, or delete the data?
+- When users create, read, update, or delete the data?
 
 ## Schema Diagram
 
@@ -52,47 +52,145 @@ one another; it aims to answer the following questions for each:
     - [Base Model](#base-model)
     - [User](#user)
       - [Permission: User Me (i.e. Current User)](#permission-user-me-ie-current-user)
+      - [Permission: List Users](#permission-list-users)
       - [Permission: Read User](#permission-read-user)
       - [Permission: Update User](#permission-update-user)
       - [Permission: Delete User](#permission-delete-user)
     - [Ipaddress](#ipaddress)
-      - [Permission: CRUD Ipaddress](#permission-crud-ipaddress)
+      - [Permission: L-CRUD Ipaddress](#permission-l-crud-ipaddress)
     - [User Ipaddress](#user-ipaddress)
     - [Note](#note)
+      - [Permission: List Notes](#permission-list-notes)
       - [Permission: Create Note](#permission-create-note)
       - [Permission: Read Note](#permission-read-note)
       - [Permission: Update Note](#permission-update-note)
       - [Permission: Delete Note](#permission-delete-note)
     - [Client](#client)
+      - [Permission: List Clients](#permission-list-clients)
       - [Permission: Create Client](#permission-create-client)
       - [Permission: Read Client](#permission-read-client)
       - [Permission: Update Client](#permission-update-client)
       - [Permission: Delete Client](#permission-delete-client)
     - [User Client](#user-client)
+      - [Permission: List User Client](#permission-list-user-client)
+      - [Permission: Create User Client](#permission-create-user-client)
+      - [Permission: Read User Client](#permission-read-user-client)
+      - [Permission: Delete User Client](#permission-delete-user-client)
     - [Client Website](#client-website)
+      - [Permission: List Client Website](#permission-list-client-website)
+      - [Permission: Create Client Website](#permission-create-client-website)
+      - [Permission: Read Client Website](#permission-read-client-website)
+      - [Permission: Delete Client Website](#permission-delete-client-website)
     - [Client Report](#client-report)
+      - [Permission: List Client Report](#permission-list-client-report)
+      - [Permission: Create Client Report](#permission-create-client-report)
+      - [Permission: Read Client Report](#permission-read-client-report)
+      - [Permission: Update Client Report](#permission-update-client-report)
+      - [Permission: Delete Client Report](#permission-delete-client-report)
     - [Client Report Note](#client-report-note)
+      - [Permission: List Client Report Note](#permission-list-client-report-note)
+      - [Permission: Create Client Report Note](#permission-create-client-report-note)
+      - [Permission: Read Client Report Note](#permission-read-client-report-note)
+      - [Permission: Update Client Report Note](#permission-update-client-report-note)
+      - [Permission: Delete Client Report Note](#permission-delete-client-report-note)
     - [Client Bucket](#client-bucket)
     - [File Asset](#file-asset)
     - [GeoCoord](#geocoord)
     - [Sharpspring](#sharpspring)
     - [BDX Feed](#bdx-feed)
     - [Website](#website)
+      - [Permission: List Website](#permission-list-website)
+      - [Permission: Create Website](#permission-create-website)
+      - [Permission: Read Website](#permission-read-website)
+      - [Permission: Update Website](#permission-update-website)
+      - [Permission: Delete Website](#permission-delete-website)
     - [Website Map](#website-map)
+      - [Permission: List Website Map](#permission-list-website-map)
+      - [Permission: Create Website Map](#permission-create-website-map)
+      - [Permission: Read Website Map](#permission-read-website-map)
+      - [Permission: Update Website Map](#permission-update-website-map)
+      - [Permission: Delete Website Map](#permission-delete-website-map)
     - [Website Page](#website-page)
+      - [Permission: List Website Page](#permission-list-website-page)
+      - [Permission: Create Website Page](#permission-create-website-page)
+      - [Permission: Read Website Page](#permission-read-website-page)
+      - [Permission: Update Website Page](#permission-update-website-page)
+      - [Permission: Delete Website Page](#permission-delete-website-page)
     - [Website Page Speed Insight](#website-page-speed-insight)
+      - [Permission: List Website Page Speed Insight](#permission-list-website-page-speed-insight)
+      - [Permission: Create Website Page Speed Insight](#permission-create-website-page-speed-insight)
+      - [Permission: Read Website Page Speed Insight](#permission-read-website-page-speed-insight)
+      - [Permission: Update Website Page Speed Insight](#permission-update-website-page-speed-insight)
+      - [Permission: Delete Website Page Speed Insight](#permission-delete-website-page-speed-insight)
     - [Website Keyword Corpus](#website-keyword-corpus)
+      - [Permission: List Website Keyword Corpus](#permission-list-website-keyword-corpus)
+      - [Permission: Create Website Keyword Corpus](#permission-create-website-keyword-corpus)
+      - [Permission: Read Website Keyword Corpus](#permission-read-website-keyword-corpus)
+      - [Permission: Update Website Keyword Corpus](#permission-update-website-keyword-corpus)
+      - [Permission: Delete Website Keyword Corpus](#permission-delete-website-keyword-corpus)
     - [Google Analytics 4](#google-analytics-4)
+      - [Permission: List Google Analytics 4 Property](#permission-list-google-analytics-4-property)
+      - [Permission: Create Google Analytics 4 Property](#permission-create-google-analytics-4-property)
+      - [Permission: Read Google Analytics 4 Property](#permission-read-google-analytics-4-property)
+      - [Permission: Update Google Analytics 4 Property](#permission-update-google-analytics-4-property)
+      - [Permission: Delete Google Analytics 4 Property](#permission-delete-google-analytics-4-property)
     - [Google Analytics 4: Stream](#google-analytics-4-stream)
+      - [Permission: List Google Analytics 4 Steam](#permission-list-google-analytics-4-steam)
+      - [Permission: Create Google Analytics 4 Steam](#permission-create-google-analytics-4-steam)
+      - [Permission: Read Google Analytics 4 Steam](#permission-read-google-analytics-4-steam)
+      - [Permission: Update Google Analytics 4 Steam](#permission-update-google-analytics-4-steam)
+      - [Permission: Delete Google Analytics 4 Steam](#permission-delete-google-analytics-4-steam)
     - [Google Search Console](#google-search-console)
+      - [Permission: List Google Search Console](#permission-list-google-search-console)
+      - [Permission: Create Google Search Console](#permission-create-google-search-console)
+      - [Permission: Read Google Search Console](#permission-read-google-search-console)
+      - [Permission: Update Google Search Console](#permission-update-google-search-console)
+      - [Permission: Delete Google Search Console](#permission-delete-google-search-console)
     - [Google Search Console: Country, Device, Page, Query, SearchAppearance](#google-search-console-country-device-page-query-searchappearance)
     - [GC Fly Tour](#gc-fly-tour)
+      - [Permission: List GC Fly Tour](#permission-list-gc-fly-tour)
+      - [Permission: Create GC Fly Tour](#permission-create-gc-fly-tour)
+      - [Permission: Read GC Fly Tour](#permission-read-gc-fly-tour)
+      - [Permission: Update GC Fly Tour](#permission-update-gc-fly-tour)
+      - [Permission: Delete GC Fly Tour](#permission-delete-gc-fly-tour)
     - [GC Fly Tour Snap](#gc-fly-tour-snap)
+      - [Permission: List GC Fly Tour Snap](#permission-list-gc-fly-tour-snap)
+      - [Permission: Create GC Fly Tour Snap](#permission-create-gc-fly-tour-snap)
+      - [Permission: Read GC Fly Tour Snap](#permission-read-gc-fly-tour-snap)
+      - [Permission: Update GC Fly Tour Snap](#permission-update-gc-fly-tour-snap)
+      - [Permission: Delete GC Fly Tour Snap](#permission-delete-gc-fly-tour-snap)
     - [GC Fly Tour Snap: Active Duration](#gc-fly-tour-snap-active-duration)
+      - [Permission: List GC Fly Tour Snap Active Duration](#permission-list-gc-fly-tour-snap-active-duration)
+      - [Permission: Create GC Fly Tour Snap Active Duration](#permission-create-gc-fly-tour-snap-active-duration)
+      - [Permission: Read GC Fly Tour Snap Active Duration](#permission-read-gc-fly-tour-snap-active-duration)
+      - [Permission: Update GC Fly Tour Snap Active Duration](#permission-update-gc-fly-tour-snap-active-duration)
+      - [Permission: Delete GC Fly Tour Snap Active Duration](#permission-delete-gc-fly-tour-snap-active-duration)
     - [GC Fly Tour Snap: Browser Report](#gc-fly-tour-snap-browser-report)
+      - [Permission: List GC Fly Tour Snap Browser Report](#permission-list-gc-fly-tour-snap-browser-report)
+      - [Permission: Create GC Fly Tour Snap Browser Report](#permission-create-gc-fly-tour-snap-browser-report)
+      - [Permission: Read GC Fly Tour Snap Browser Report](#permission-read-gc-fly-tour-snap-browser-report)
+      - [Permission: Update GC Fly Tour Snap Browser Report](#permission-update-gc-fly-tour-snap-browser-report)
+      - [Permission: Delete GC Fly Tour Snap Browser Report](#permission-delete-gc-fly-tour-snap-browser-report)
     - [GC Fly Tour Snap: Hotspot Click](#gc-fly-tour-snap-hotspot-click)
+      - [Permission: List GC Fly Tour Snap Hotspot Click](#permission-list-gc-fly-tour-snap-hotspot-click)
+      - [Permission: Create GC Fly Tour Snap Hotspot Click](#permission-create-gc-fly-tour-snap-hotspot-click)
+      - [Permission: Read GC Fly Tour Snap Hotspot Click](#permission-read-gc-fly-tour-snap-hotspot-click)
+      - [Permission: Update GC Fly Tour Snap Hotspot Click](#permission-update-gc-fly-tour-snap-hotspot-click)
+      - [Permission: Delete GC Fly Tour Snap Hotspot Click](#permission-delete-gc-fly-tour-snap-hotspot-click)
     - [GC Fly Tour Snap: Traffic Source](#gc-fly-tour-snap-traffic-source)
+      - [Permission: List GC Fly Tour Snap Traffic Source](#permission-list-gc-fly-tour-snap-traffic-source)
+      - [Permission: Create GC Fly Tour Snap Traffic Source](#permission-create-gc-fly-tour-snap-traffic-source)
+      - [Permission: Read GC Fly Tour Snap Traffic Source](#permission-read-gc-fly-tour-snap-traffic-source)
+      - [Permission: Update GC Fly Tour Snap Traffic Source](#permission-update-gc-fly-tour-snap-traffic-source)
+      - [Permission: Delete GC Fly Tour Snap Traffic Source](#permission-delete-gc-fly-tour-snap-traffic-source)
     - [GC Fly Tour Snap: View](#gc-fly-tour-snap-view)
+      - [Permission: List GC Fly Tour Snap View](#permission-list-gc-fly-tour-snap-view)
+      - [Permission: Create GC Fly Tour Snap View](#permission-create-gc-fly-tour-snap-view)
+      - [Permission: Read GC Fly Tour Snap View](#permission-read-gc-fly-tour-snap-view)
+      - [Permission: Update GC Fly Tour Snap View](#permission-update-gc-fly-tour-snap-view)
+      - [Permission: Delete GC Fly Tour Snap View](#permission-delete-gc-fly-tour-snap-view)
+
+----
 
 ### Base Model
 
@@ -108,6 +206,8 @@ one another; it aims to answer the following questions for each:
 
 For the sake of being brief, all tables adopt the following base model. The
 “id” field is the primary value used in lookups for any associated data models.
+
+----
 
 ### User
 
@@ -129,25 +229,25 @@ The `user` data model is essential in determining the privileges that users have
 and by extension what data they are authorized to access through the API.
 
 As described in the previous sections, the Authentication will be handled by
-the Auth0 database server and therefore our application database will not store
-any passwords. The application database will only store information about the
-privileges granted to the user and minimal personal info. NO credentials unique
-to the user will be stored on the application database. The only personal
+the **Auth0 database server** and therefore our application database will not
+store any passwords. The application database will only store information about
+the privileges granted to the user and minimal personal info. NO credentials
+unique to the user will be stored on the application database. The only personal
 information stored on the application database is the email address and this
-field cannot be updated by any user. The auth_id field is a unique identifier
+field cannot be updated by any user. The `auth_id` field is a unique identifier
 provided by the authentication database and cannot be changed by any user.
 
 The user privileges are predominantly controlled by the role field in the
-database. The user data model includes a few flags: is_active, is_verified,
-is_superuser.
+database. The user data model includes a few flags: `is_active`, `is_verified`,
+`is_superuser`.
 
 #### Permission: User Me (i.e. Current User)
 
 - there is no API endpoint to *CREATE* a new user
-  - only people with credentials to the Auth0 account can manually create
+  - only people with credentials to the Auth0 account may manually create
     a new user in the authentication database
 - any user may register and login to the authentication database
-  - all new users must verify their email address before they can login
+  - all new users must verify their email address before they may login
 - after a user’s first authenticated, application will *CREATE* the user in
   the application database
   - by default all new users are assigned the `role=user`
@@ -155,35 +255,42 @@ is_superuser.
   - by default all new user have the flag `is_verified=False`
   - by default all new user have the flag `is_superuser=False`
 
+#### Permission: List Users
+
+- only users with `role=admin` may *LIST* all users
+- only users with `role=manager` may *LIST* users with `role=client|employee`
+
 #### Permission: Read User
 
-- a user can *READ* their own user data
+- a user may *READ* their own user data
 - a user may *READ* certain privilege flags depending on the user’s role
-  - `role=admin` can see all flags, including `is_superuser`
-  - `role=manager`|client|employee can only see `is_active` and `is_verified`
+  - `role=admin` may see all flags, including `is_superuser`
+  - `role=manager`|client|employee may only see `is_active` and `is_verified`
 
 #### Permission: Update User
 
-- a user can *UPDATE* limited fields of their own data
-  - a user can *UPDATE* their flag `is_verified=True` by validating a
+- a user may *UPDATE* limited fields of their own data
+  - a user may *UPDATE* their flag `is_verified=True` by validating a
   verification token provided through an email
-  - a user can have their flag `is_verified` *UPDATE*, if the Auth0
+  - a user may have their flag `is_verified` *UPDATE*, if the Auth0
   authentication database provides an alternate value
-- users with `role=manager` can *UPDATE* the:
+- users with `role=manager` may *UPDATE* the:
   - role of other users with `role=client`|employee|user,
     but not to `role=admin`
   - flags of users with `role=client|employee|user`,
     but cannot set the flag `is_superuser=True`
-- only users with `role=admin` can *UPDATE* user privileges without restriction
+- only users with `role=admin` may *UPDATE* user privileges without restriction
   - assign any user the `role=admin`
   - update any flag of any user
-- only one user can have flag `is_superuser=True` (the admin 👑 of admin ⚔️)
-  - only user with flag `is_superuser` can relinquish their administrative-admin
+- only one user may have flag `is_superuser=True` (the admin 👑 of admin ⚔️)
+  - only user with flag `is_superuser` may relinquish their administrative-admin
     role to one other user in the application database
 
 #### Permission: Delete User
 
-- only users with `role=admin` can *DELETE* users
+- only users with `role=admin` may *DELETE* users
+
+----
 
 ### Ipaddress
 
@@ -199,10 +306,15 @@ is_superuser.
         }
     }
 
-#### Permission: CRUD Ipaddress
+#### Permission: L-CRUD Ipaddress
 
-- There are no public endpoints available to create, read, update, or delete
-  `ipaddress` data. Only users with `role=admin` can access this data.
+- There are no *public* endpoints available to list, create, read, update,
+  or delete `ipaddress` data.
+- Only users with `role=admin` may *READ* or *DELETE* this data.
+- The API will *CREATE* new ipaddress records as needed when a user logs in and
+  accesses the /users/me endpoint from a new ipaddress.
+
+----
 
 ### User Ipaddress
 
@@ -218,8 +330,15 @@ is_superuser.
         }
     }
 
-- There are no public endpoints available to create, read, update, or delete
-  `user_ipaddress` data. Only users with `role=admin` can access this data.
+- this is the primary association table between `users` and `ipaddresses`, and
+  determines which users belong to which ipaddresses, and vice versa
+- there are no *public* endpoints available to *LIST*, *CREATE*, *READ*,
+  *UPDATE*, or *DELETE* `user_ipaddress` data
+- only users with `role=admin` may *READ* or *DELETE* this data
+- the api uses a CRUD interface to manage these records as needed, such as when
+  a user logs in and accesses the /users/me endpoint from a new ipaddress
+
+----
 
 ### Note
 
@@ -234,48 +353,76 @@ is_superuser.
         }
     }
 
+#### Permission: List Notes
+
+- users with `role=admin|manager` may *LIST* all notes
+- users with `role=client|employee` may *LIST* only notes that they created
+  and notes that are associated with their client
+- users with `role=user` may *LIST* only notes that they created
+
 #### Permission: Create Note
 
-- any user can *CREATE* a new note
+- any user may *CREATE* a new note
   - notes are assigned to one user
 
 #### Permission: Read Note
 
-- any user can *READ* their own notes
-- users with `role=manager` can *READ* notes of users with
+- any user may *READ* their own notes
+- users with `role=manager` may *READ* notes of users with
   `role=client|employee`
-- only users with `role=admin` can *READ* notes of any users
+- only users with `role=admin` may *READ* notes of any users
 
 #### Permission: Update Note
 
-- any user can *UPDATE* their own notes
-- only users with `role=admin` can *UPDATE* notes of any users
+- any user may *UPDATE* their own notes
+- only users with `role=admin` may *UPDATE* notes of any users
 
 #### Permission: Delete Note
 
-- any user can *DELETE* their own notes
-- users with `role=manager` can *DELETE* notes of users with
+- any user may *DELETE* their own notes
+- users with `role=manager` may *DELETE* notes of users with
   `role=client|employee`
-- only users with `role=admin` can *DELETE* notes of any users
+- only users with `role=admin` may *DELETE* notes of any users
+
+----
 
 ### Client
 
     Table "gcapidb"."client" {
         "title" VARCHAR(96) [pk, not null]
         "description" TEXT(5000)
+        "is_active" TINYINT(1) [not null, default: 1]
 
         Indexes {
             title [unique, name: "title_UNIQUE"]
         }
     }
 
+#### Permission: List Clients
+
+- users with `role=admin|manager` may *LIST* all clients
+- users with `role=client|employee` may only *LIST* clients that are associated
+  with their client
+
 #### Permission: Create Client
+
+- users with `role=admin|manager` may *CREATE* a new clients
 
 #### Permission: Read Client
 
+- users with `role=admin|manager` may read any client
+- users may read a client if they are associated with the client through
+  the `user_client` table
+
 #### Permission: Update Client
 
+- users with `role=admin|manager` may *UPDATE* any client
+
 #### Permission: Delete Client
+
+- only users with `role=admin` may *DELETE* any client
+
+----
 
 ### User Client
 
@@ -290,6 +437,28 @@ is_superuser.
         }
     }
 
+- this is the primary association table between `users` and `clients`, and
+  determines which users have access to which clients, and vice versa
+
+#### Permission: List User Client
+
+- users with `role=admin|manager` may *LIST* all `user_client` associations
+
+#### Permission: Create User Client
+
+- assigns a `user` to a `client`
+- users with `role=admin|manager` may *CREATE* a new `user_client` association
+
+#### Permission: Read User Client
+
+- users with `role=admin|manager` may *READ* any `user_client` association
+
+#### Permission: Delete User Client
+
+- users with `role=admin|manager` may *DELETE* any `user_client` association
+
+----
+
 ### Client Website
 
     Table "gcapidb"."client_website" {
@@ -302,6 +471,33 @@ is_superuser.
             client_id [name: "client_id_idx"]
         }
     }
+
+- this is the primary association table between `clients` and the `websites`
+  that belong to them
+
+#### Permission: List Client Website
+
+- users with `role=admin|manager` may *LIST* all `client_website` associations
+- users with `role=client|employee` may *LIST* only `client_website`
+  associations that are associated with clients that they are associated with
+
+#### Permission: Create Client Website
+
+- users with `role=admin|manager` may *CREATE* a new `client_website`
+  association
+
+#### Permission: Read Client Website
+
+- users with `role=admin|manager` may *READ* any `client_website` association
+- users with `role=client|employee` may *READ* only `client_website`
+  associations that are associated with clients that they are associated with
+
+#### Permission: Delete Client Website
+
+- users with `role=admin|manager` may *DELETE* any `client_website`
+  association
+
+----
 
 ### Client Report
 
@@ -316,6 +512,32 @@ is_superuser.
         }
     }
 
+#### Permission: List Client Report
+
+- users with `role=admin|manager` may *LIST* all client reports
+- users with `role=client|employee` may *LIST* only client reports that are
+  associated with clients that they are associated with
+
+#### Permission: Create Client Report
+
+- users with `role=admin|manager|employee` may *CREATE* a new client report
+
+#### Permission: Read Client Report
+
+- users with `role=admin|manager` may *READ* any client report
+- users with `role=client|employee` may *READ* only client reports that are
+  associated with clients that they are associated with
+
+#### Permission: Update Client Report
+
+- users with `role=admin|manager|employee` may *UPDATE* any client report
+
+#### Permission: Delete Client Report
+
+- users with `role=admin|manager` may *DELETE* any client report
+
+----
+
 ### Client Report Note
 
     Table "gcapidb"."client_report_note" {
@@ -329,6 +551,18 @@ is_superuser.
         }
     }
 
+#### Permission: List Client Report Note
+
+#### Permission: Create Client Report Note
+
+#### Permission: Read Client Report Note
+
+#### Permission: Update Client Report Note
+
+#### Permission: Delete Client Report Note
+
+----
+
 ### Client Bucket
 
     Table "gcapidb"."client_bucket" {
@@ -341,6 +575,8 @@ is_superuser.
             client_id [name: "client_id_idx"]
         }
     }
+
+----
 
 ### File Asset
 
@@ -368,6 +604,8 @@ is_superuser.
         }
     }
 
+----
+
 ### GeoCoord
 
     Table "gcapidb"."geocoord" {
@@ -380,6 +618,8 @@ is_superuser.
         }
     }
 
+----
+
 ### Sharpspring
 
     Table "gcapidb"."sharpspring" {
@@ -391,6 +631,8 @@ is_superuser.
             client_id [name: "client_id_idx"]
         }
     }
+
+----
 
 ### BDX Feed
 
@@ -405,6 +647,8 @@ is_superuser.
         }
     }
 
+----
+
 ### Website
 
     Table "gcapidb"."website" {
@@ -416,6 +660,18 @@ is_superuser.
         }
     }
 
+#### Permission: List Website
+
+#### Permission: Create Website
+
+#### Permission: Read Website
+
+#### Permission: Update Website
+
+#### Permission: Delete Website
+
+----
+
 ### Website Map
 
     Table "gcapidb"."website_map" {
@@ -426,6 +682,18 @@ is_superuser.
             website_id [name: "website_id_idx"]
         }
     }
+
+#### Permission: List Website Map
+
+#### Permission: Create Website Map
+
+#### Permission: Read Website Map
+
+#### Permission: Update Website Map
+
+#### Permission: Delete Website Map
+
+----
 
 ### Website Page
 
@@ -443,6 +711,18 @@ is_superuser.
             sitemap_id [name: "sitemap_id_idx"]
         }
     }
+
+#### Permission: List Website Page
+
+#### Permission: Create Website Page
+
+#### Permission: Read Website Page
+
+#### Permission: Update Website Page
+
+#### Permission: Delete Website Page
+
+----
 
 ### Website Page Speed Insight
 
@@ -481,6 +761,18 @@ is_superuser.
         }
     }
 
+#### Permission: List Website Page Speed Insight
+
+#### Permission: Create Website Page Speed Insight
+
+#### Permission: Read Website Page Speed Insight
+
+#### Permission: Update Website Page Speed Insight
+
+#### Permission: Delete Website Page Speed Insight
+
+----
+
 ### Website Keyword Corpus
 
     Table "gcapidb"."website_keywordcorpus" {
@@ -494,6 +786,18 @@ is_superuser.
             page_id [name: "page_id_idx"]
         }
     }
+
+#### Permission: List Website Keyword Corpus
+
+#### Permission: Create Website Keyword Corpus
+
+#### Permission: Read Website Keyword Corpus
+
+#### Permission: Update Website Keyword Corpus
+
+#### Permission: Delete Website Keyword Corpus
+
+----
 
 ### Google Analytics 4
 
@@ -512,6 +816,18 @@ is_superuser.
         }
     }
 
+#### Permission: List Google Analytics 4 Property
+
+#### Permission: Create Google Analytics 4 Property
+
+#### Permission: Read Google Analytics 4 Property
+
+#### Permission: Update Google Analytics 4 Property
+
+#### Permission: Delete Google Analytics 4 Property
+
+----
+
 ### Google Analytics 4: Stream
 
     Table "gcapidb"."go_a4_stream" {
@@ -526,6 +842,18 @@ is_superuser.
         }
     }
 
+#### Permission: List Google Analytics 4 Steam
+
+#### Permission: Create Google Analytics 4 Steam
+
+#### Permission: Read Google Analytics 4 Steam
+
+#### Permission: Update Google Analytics 4 Steam
+
+#### Permission: Delete Google Analytics 4 Steam
+
+----
+
 ### Google Search Console
 
     Table "gcapidb"."go_sc" {
@@ -539,6 +867,18 @@ is_superuser.
             website_id [name: "website_id_idx"]
         }
     }
+
+#### Permission: List Google Search Console
+
+#### Permission: Create Google Search Console
+
+#### Permission: Read Google Search Console
+
+#### Permission: Update Google Search Console
+
+#### Permission: Delete Google Search Console
+
+----
 
 ### Google Search Console: Country, Device, Page, Query, SearchAppearance
 
@@ -558,6 +898,8 @@ is_superuser.
         }
     }
 
+----
+
 ### GC Fly Tour
 
     Table "gcapidb"."gcft" {
@@ -569,6 +911,18 @@ is_superuser.
             client_id [name: "client_id_idx"]
         }
     }
+
+#### Permission: List GC Fly Tour
+
+#### Permission: Create GC Fly Tour
+
+#### Permission: Read GC Fly Tour
+
+#### Permission: Update GC Fly Tour
+
+#### Permission: Delete GC Fly Tour
+
+----
 
 ### GC Fly Tour Snap
 
@@ -588,6 +942,18 @@ is_superuser.
         }
     }
 
+#### Permission: List GC Fly Tour Snap
+
+#### Permission: Create GC Fly Tour Snap
+
+#### Permission: Read GC Fly Tour Snap
+
+#### Permission: Update GC Fly Tour Snap
+
+#### Permission: Delete GC Fly Tour Snap
+
+----
+
 ### GC Fly Tour Snap: Active Duration
 
     Table "gcapidb"."gcft_snap_activeduration" {
@@ -602,6 +968,18 @@ is_superuser.
             snap_id [name: "snap_id_idx"]
         }
     }
+
+#### Permission: List GC Fly Tour Snap Active Duration
+
+#### Permission: Create GC Fly Tour Snap Active Duration
+
+#### Permission: Read GC Fly Tour Snap Active Duration
+
+#### Permission: Update GC Fly Tour Snap Active Duration
+
+#### Permission: Delete GC Fly Tour Snap Active Duration
+
+----
 
 ### GC Fly Tour Snap: Browser Report
 
@@ -627,6 +1005,18 @@ is_superuser.
             snap_id [name: "snap_id_idx"]
         }
     }
+
+#### Permission: List GC Fly Tour Snap Browser Report
+
+#### Permission: Create GC Fly Tour Snap Browser Report
+
+#### Permission: Read GC Fly Tour Snap Browser Report
+
+#### Permission: Update GC Fly Tour Snap Browser Report
+
+#### Permission: Delete GC Fly Tour Snap Browser Report
+
+----
 
 ### GC Fly Tour Snap: Hotspot Click
 
@@ -654,6 +1044,18 @@ is_superuser.
         }
     }
 
+#### Permission: List GC Fly Tour Snap Hotspot Click
+
+#### Permission: Create GC Fly Tour Snap Hotspot Click
+
+#### Permission: Read GC Fly Tour Snap Hotspot Click
+
+#### Permission: Update GC Fly Tour Snap Hotspot Click
+
+#### Permission: Delete GC Fly Tour Snap Hotspot Click
+
+----
+
 ### GC Fly Tour Snap: Traffic Source
 
     Table "gcapidb"."gcft_snap_trafficsource" {
@@ -674,6 +1076,18 @@ is_superuser.
         }
     }
 
+#### Permission: List GC Fly Tour Snap Traffic Source
+
+#### Permission: Create GC Fly Tour Snap Traffic Source
+
+#### Permission: Read GC Fly Tour Snap Traffic Source
+
+#### Permission: Update GC Fly Tour Snap Traffic Source
+
+#### Permission: Delete GC Fly Tour Snap Traffic Source
+
+----
+
 ### GC Fly Tour Snap: View
 
     Table "gcapidb"."gcft_snap_view" {
@@ -687,3 +1101,15 @@ is_superuser.
             snap_id [name: "snap_id_idx"]
         }
     }
+
+#### Permission: List GC Fly Tour Snap View
+
+#### Permission: Create GC Fly Tour Snap View
+
+#### Permission: Read GC Fly Tour Snap View
+
+#### Permission: Update GC Fly Tour Snap View
+
+#### Permission: Delete GC Fly Tour Snap View
+
+----

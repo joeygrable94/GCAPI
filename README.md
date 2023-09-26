@@ -65,8 +65,6 @@
 ## Additional Resources
 
 - [CloudCraft AWS Service Diagrams & Cost Estimates](https://www.cloudcraft.co/)
-- [Auth0 by Okta Authentication API Documentation](https://auth0.com/docs/api/authentication)
-- [Permissions, Privileges and Scopes - What's the Difference?!](https://youtu.be/vULfBEn8N7E?si=WKJH4tOtz3d1Eu0f)
 - [AWS Getting Started: Creating A MySQL Database](https://aws.amazon.com/getting-started/hands-on/create-mysql-db/)
 - [Stackify: Getting Started with AWS Lambda with Python](https://stackify.com/aws-lambda-with-python-a-complete-getting-started-guide/)
 - [AmazonS3AWS S3 CloudFront Route53 Video Streaming](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tutorial-s3-cloudfront-route53-video-streaming.html)
