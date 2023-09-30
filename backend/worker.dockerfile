@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.11
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
@@ -10,7 +10,8 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements
 COPY ./scripts/prestart-worker.sh ./scripts/start-worker.sh /
 RUN chmod +x /start-worker.sh /prestart-worker.sh
 
-COPY ./app /app
+COPY ./app/scripts /scripts
+COPY ./app/app /app/app
 WORKDIR /app/
 
 # Copy poetry.lock* in case it doesn't exist in the repo

@@ -53,7 +53,7 @@ additional privileges by an admin to access any data.
    - New users are put into a “pending” state and cannot access the API until
    they are granted access by a user with the role of "admin".
 
-::: mermaid
+``` mermaid
 sequenceDiagram
     participant User
     participant Auth
@@ -75,7 +75,7 @@ sequenceDiagram
         Auth->>Auth: 1. verify user credentials<br/>2. checks user is_verified=true<br/>3. generate JWT
     end
     Auth-->>User: send access_token and<br/>refresh_token to access the API
-:::
+```
 
 ## User Authorization
 
@@ -150,7 +150,7 @@ and have minimal access.
 
 ## User Authorization Flow
 
-::: mermaid
+``` mermaid
 sequenceDiagram
     participant Client
     participant Auth
@@ -220,7 +220,7 @@ sequenceDiagram
     end
     API->>Resource: Fetch Requested Resource
     Resource-->>Client: Protected Resource
-:::
+```
 
 ----
 
@@ -248,11 +248,15 @@ sequenceDiagram
 
 ### Generate App Secrets
 
-    openssl rand -hex 32
+```bash
+openssl rand -hex 32
+```
 
 ### GitLeaks
 
-    gitleaks detect --verbose --config=./gitleaks.toml
+```bash
+gitleaks detect --verbose --config=./gitleaks.toml
+```
 
 - [GitLeaks Repository](https://github.com/zricethezav/gitleaks)
 - [GitLeaks Allow List for Inline Cases of False Positive Secrets Leak](https://github.com/zricethezav/gitleaks/issues/579)
@@ -270,4 +274,7 @@ for more information.
 ## Resources
 
 - [Auth0 by Okta Authentication API Documentation](https://auth0.com/docs/api/authentication)
-- [Permissions, Privileges and Scopes - What's the Difference?!](https://youtu.be/vULfBEn8N7E?si=WKJH4tOtz3d1Eu0f)
+- [Auth0 Permissions, Privileges and Scopes - What's the Difference?!](https://youtu.be/vULfBEn8N7E?si=WKJH4tOtz3d1Eu0f)
+- [Auth0 Using the Management API within Actions](https://community.auth0.com/t/how-can-i-use-the-management-api-in-actions/64947)
+- [Auth0 Verifing Emails](https://auth0.com/docs/manage-users/user-accounts/verify-emails)
+- [Auth0 Customize Email Handling](https://auth0.com/docs/customize/email/manage-email-flow)
