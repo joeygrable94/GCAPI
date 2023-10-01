@@ -54,7 +54,7 @@ are crucial for data security.
 ### Resource Data Models and Relationships
 
 Detailed data models and their relationships are documented on GitHub in the
-[SQL README.md file](https://github.com/joeygrable94/GCAPI/blob/main/sql/README.md).
+[SQL README.md file](https://github.com/joeygrable94/GCAPI/blob/main/SQL.md).
 
 ### User Roles and Privileges
 
