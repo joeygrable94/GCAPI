@@ -25,8 +25,7 @@ models.
     <dt>indigo</dt>
     <dd>website analytics and search console data:
     <br/>GoogleSearchConsole, GSCCountry, GSCDevice, GSCPage, GSCQuery,
-    GSCSearchappearance, GoogleAnalytics4, GA4Steam, GoogleUniversalAnalytics,
-    GUAView</dd>
+    GSCSearchappearance, GoogleAnalytics4, GA4Steam</dd>
     <dt>orange</dt>
     <dd>GC Fly Tours and GCFT analytics data:
     <br/>GCFlyTour, GCFTSnap, GCFTSnapView, GCFTSnapActiveduration,
@@ -926,6 +925,9 @@ Table "gcapidb"."client_bucket" {
 }
 ```
 
+This is a simple data model for storing the AWS S3 bucket details used to store
+and fetch client data from the AWS S3 bucket.
+
 ----
 
 ### File Asset
@@ -957,3 +959,10 @@ Table "gcapidb"."file_asset" {
     }
 }
 ```
+
+File assets are primarily associated with a `Client Bucket` and used to store
+client data in an AWS S3 bucket. File assets may come in different formats and
+types, such as images, videos, and documents. File assets may also be associated
+other data models like `Geo Coordinate`, `GC Fly Tour Snap`, and `BDX Feed` files.
+
+----
