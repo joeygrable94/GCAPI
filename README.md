@@ -1,5 +1,7 @@
 # GCAPI Application
 
+[![CodeQL](https://github.com/joeygrable94/GCAPI/actions/workflows/codeql.yml/badge.svg)](https://github.com/joeygrable94/GCAPI/actions/workflows/codeql.yml) [![GitHub CI](https://github.com/joeygrable94/GCAPI/actions/workflows/ci.yml/badge.svg)](https://github.com/joeygrable94/GCAPI/actions/workflows/ci.yml)
+
 - [GCAPI Application](#gcapi-application)
   - [Application Infrastructure](#application-infrastructure)
     - [Application Services](#application-services)
