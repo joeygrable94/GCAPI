@@ -102,14 +102,16 @@ Table "gcapidb"."user" {
     "id" CHAR(32) [not null]
     "auth_id" VARCHAR(255) [pk, not null]
     "email" VARCHAR(320) [not null]
+    "username" VARCHAR(255) [not null]
     "is_active" TINYINT(1) [not null, default: 1]
     "is_verified" TINYINT(1) [not null, default: 0]
     "is_superuser" TINYINT(1) [not null, default: 0]
-    "roles" JSON [not null, default: "[\"user\"]"]
+    "scopes" JSON [not null, default: "[\"role:user\"]"]
 
     Indexes {
         auth_id [unique, name: "auth_id_UNIQUE"]
         email [unique, name: "email_UNIQUE"]
+        username [unique, name: "username_UNIQUE"]
     }
 }
 ```
@@ -869,8 +871,8 @@ with them because they are displayed on a map.
 ```sql
 Table "gcapidb"."sharpspring" {
     "id" CHAR(32) [pk, not null]
-    "hashed_api_key" VARCHAR(64) [not null]
-    "hashed_secret_key" VARCHAR(64) [not null]
+    "api_key" VARCHAR(255) [not null]
+    "secret_key" VARCHAR(255) [not null]
     "client_id" CHAR(32) [not null]
 
     Indexes {
@@ -935,7 +937,7 @@ and fetch client data from the AWS S3 bucket.
 ```sql
 Table "gcapidb"."file_asset" {
     "id" CHAR(32) [not null]
-    "name" VARCHAR(96) [pk, not null]
+    "filename" VARCHAR(96) [pk, not null]
     "extension" VARCHAR(255) [not null]
     "size_kb" INT [not null]
     "title" VARCHAR(96) [not null]

@@ -1,9 +1,9 @@
 Table "gcapidb"."TABLE_NAME" {
-    "id" CHAR(32) [not null]
-    "created_on" DATETIME [not null, default: `now()`]
-    "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
+  "id" CHAR(32) [not null]
+  "created_on" DATETIME [not null, default: `now()`]
+  "updated_on" DATETIME [not null, default: `now()`, onupdate: `now()`]
 
-    Indexes {
-        id [unique, name: "id_UNIQUE"]
-    }
+  Indexes {
+    id [unique, name: "id_UNIQUE"]
+  }
 }

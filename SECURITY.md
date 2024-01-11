@@ -79,7 +79,7 @@ sequenceDiagram
     participant API
     participant Permissions
     participant Resource
-    Auth-->>Client: Send X-CSRF-TOKEN<br/>+ X-RATE-LIMIT
+    Auth-->>Client: Send X-CSRF-TOKEN
     Client->>Auth: Grant Auth:<br/>Client Credentials
     loop User
         Auth->>Auth: generate JWT

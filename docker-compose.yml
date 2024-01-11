@@ -4,6 +4,7 @@ services:
 
   proxy:
     image: traefik:2.9.1
+    env_file: .env
     ports:
       - 80:80
       - 443:443
@@ -35,12 +36,12 @@ services:
         - traefik.http.middlewares.${STACK_NAME?Variable not set}-https-redirect.redirectscheme.scheme=https
         - traefik.http.middlewares.${STACK_NAME?Variable not set}-https-redirect.redirectscheme.permanent=true
         # Handle host with and without "www" to redirect to only one of them
-        # Uses environment variable DOMAIN
+        # Uses environment variable API_DOMAIN
         # To disable www redirection remove the Host() you want to discard, here and below for HTTPS
-        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.rule=Host(`${DOMAIN-localhost}`) || Host(`www.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.rule=Host(`${API_DOMAIN-localhost}`) || Host(`www.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-http.entrypoints=http
         # traefik-https the actual router using HTTPS
-        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.rule=Host(`${DOMAIN-localhost}`) || Host(`www.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.rule=Host(`${API_DOMAIN-localhost}`) || Host(`www.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.tls=true
         # Use the "le" (Let's Encrypt) resolver created below
@@ -49,13 +50,13 @@ services:
         - traefik.http.services.${STACK_NAME?Variable not set}-proxy.loadbalancer.server.port=80
         # Handle domain with and without "www" to redirect to only one
         # To disable www redirection remove the next line
-        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.regex=^https?://(www.)?(${DOMAIN-localhost})/(.*)
+        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.regex=^https?://(www.)?(${API_DOMAIN-localhost})/(.*)
         # Redirect a domain with www to non-www
         # To disable it remove the next line
-        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.replacement=https://${DOMAIN-localhost}/$${3}
+        - traefik.http.middlewares.${STACK_NAME?Variable not set}-www-redirect.redirectregex.replacement=https://${API_DOMAIN-localhost}/$${3}
         # Redirect a domain without www to www
         # To enable it remove the previous line and uncomment the next
-        # - traefik.http.middlewares.${STACK_NAME}-www-redirect.redirectregex.replacement=https://www.${DOMAIN}/$${3}
+        # - traefik.http.middlewares.${STACK_NAME}-www-redirect.redirectregex.replacement=https://www.${API_DOMAIN}/$${3}
         # Middleware to redirect www, to disable it remove the next line
         - traefik.http.routers.${STACK_NAME?Variable not set}-proxy-https.middlewares=${STACK_NAME?Variable not set}-www-redirect
         # Middleware to redirect www, and redirect HTTP to HTTPS
@@ -70,10 +71,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.rule=Host(`whoami.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.rule=Host(`whoami.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.entrypoints=http
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-http.middlewares=${STACK_NAME?Variable not set}-https-redirect
-        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.rule=Host(`whoami.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.rule=Host(`whoami.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-whoami-https.tls.certresolver=le
@@ -90,7 +91,7 @@ services:
     restart: "unless-stopped"
     environment:
       - MYSQL_HOST=${DATABASE_SERVER}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_USER=${DATABASE_USER}
       - MYSQL_PASSWORD=${DATABASE_PASSWORD}
@@ -121,10 +122,10 @@ services:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.rule=Host(`dbadmin.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.rule=Host(`dbadmin.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.entrypoints=http
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-http.middlewares=${STACK_NAME?Variable not set}-https-redirect
-        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.rule=Host(`dbadmin.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.rule=Host(`dbadmin.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-dbadmin-https.tls.certresolver=le
@@ -150,19 +151,19 @@ services:
     env_file:
       - .env
     environment:
-      - CELERY_BROKER_URL=${REDIS_CONN_URI?Variable not set}/0
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL?Variable not set}
       - FLOWER_PORT=5555
     command:
-      - "--broker=${REDIS_CONN_URI?Variable not set}/0"
+      - "--broker=${CELERY_BROKER_URL?Variable not set}"
     deploy:
       labels:
         - traefik.enable=true
         - traefik.docker.network=${TRAEFIK_PUBLIC_NETWORK?Variable not set}
         - traefik.constraint-label=${TRAEFIK_PUBLIC_TAG?Variable not set}
-        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.rule=Host(`flower.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.rule=Host(`flower.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.entrypoints=http
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-http.middlewares=${STACK_NAME?Variable not set}-https-redirect
-        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.rule=Host(`flower.${DOMAIN-localhost}`)
+        - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.rule=Host(`flower.${API_DOMAIN-localhost}`)
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.entrypoints=https
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.tls=true
         - traefik.http.routers.${STACK_NAME?Variable not set}-flower-https.tls.certresolver=le
@@ -179,10 +180,10 @@ services:
       - cache
       - db
     environment:
-      - SERVER_NAME=${DOMAIN-localhost}
-      - SERVER_HOST=https://${DOMAIN-localhost}
+      - SERVER_NAME=${API_DOMAIN-localhost}
+      - SERVER_HOST=https://${API_DOMAIN-localhost}
       # Allow explicit env var override for tests
-      - SMTP_HOST=${SMTP_HOST?Variable not set}
+      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST?Variable not set}
     build:
       context: ./backend
       dockerfile: worker.dockerfile
@@ -201,8 +202,8 @@ services:
       - cache
       - db
     environment:
-      - SERVER_NAME=${DOMAIN-localhost}
-      - SMTP_HOST=${SMTP_HOST}
+      - SERVER_NAME=${API_DOMAIN-localhost}
+      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST}
     build:
       context: ./backend
       dockerfile: backend.dockerfile

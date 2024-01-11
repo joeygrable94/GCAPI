@@ -10,9 +10,9 @@ MODULE_NAME=${MODULE_NAME:-$DEFAULT_MODULE_NAME}
 VARIABLE_NAME=${VARIABLE_NAME:-app}
 APP_MODULE=${APP_MODULE:-"$MODULE_NAME:$VARIABLE_NAME"}
 
-HOST=${BACKEND_HOST:-0.0.0.0}
-PORT=${BACKEND_PORT:-8888}
-LOG_LEVEL=${BACKEND_LOG_LEVEL:-info}
+HOST=${API_HOST_IP:-0.0.0.0}
+PORT=${API_HOST_PORT:-8888}
+LOG_LEVEL=${API_LOG_LEVEL:-info}
 
 # If there's a prestart.sh script in the /app directory or other path specified, run it before starting
 PRE_START_PATH=${PRE_START_PATH:-/app/prestart.sh}
