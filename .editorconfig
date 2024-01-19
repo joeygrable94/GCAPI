@@ -22,16 +22,20 @@ end_of_line = lf
 [*.{bat,cmd}]
 end_of_line = crlf
 
+[*.*py]
+indent_size = 4
+quote_type = double
+
+[*.dbml]
+indent_size = 2
+indent_style = space
+
 [*.json]
 indent_size = 2
 
 [{*.ts,*.tsx,*.js,*.jsx}]
 indent_size = 2
 
-[*.*py]
-indent_size = 4
-quote_type = double
-
-[*.dbml]
+[*.{scss,sass},*.css]
 indent_size = 2
 indent_style = space

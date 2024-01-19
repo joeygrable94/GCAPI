@@ -9,7 +9,7 @@ if [ -f .env ]; then
 fi
 
 TAG=${TAG?Variable not set} \
-VITE_APP_ENV=${VITE_APP_ENV-production} \
+APP_ENV=${APP_ENV-production} \
 docker compose \
 -f docker-compose.yml \
 build

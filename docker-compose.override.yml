@@ -67,7 +67,7 @@ services:
 
   frontend:
     ports:
-      - 3333:3000
+      - 3000:3000
     build:
       context: ./frontend
       args:

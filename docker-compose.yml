@@ -220,7 +220,7 @@ services:
     image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-frontend:${TAG-latest}'
     env_file: .env
     ports:
-      - 3333:3000
+      - 3000:3000
     depends_on:
       - db
       - backend
