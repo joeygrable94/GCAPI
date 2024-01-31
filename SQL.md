@@ -103,6 +103,7 @@ Table "gcapidb"."user" {
     "auth_id" VARCHAR(255) [pk, not null]
     "email" VARCHAR(320) [not null]
     "username" VARCHAR(255) [not null]
+    "picture" VARCHAR(1024) [not null, default: "https://www.gravatar.com/avatar/?d=identicon"]
     "is_active" TINYINT(1) [not null, default: 1]
     "is_verified" TINYINT(1) [not null, default: 0]
     "is_superuser" TINYINT(1) [not null, default: 0]
