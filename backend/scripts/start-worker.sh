@@ -8,4 +8,4 @@ python /app/prestart.py
 
 echo "Starting Backend Worker..."
 
-celery --app app.worker worker -l info -Q tasks,users,websites,sitemaps,webpages -c 1
+taskiq worker app.broker:broker app.tasks.core_tasks app.tasks.website_tasks

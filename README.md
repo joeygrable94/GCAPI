@@ -48,7 +48,7 @@
   - [SqlAlchemy](https://docs.sqlalchemy.org/en/20/) for database ORM and transactions
     - [Ex. FastAPI SQLAlchemy Async DB Config](https://rogulski.it/blog/fastapi-async-db/)
   - [Pydantic](https://docs.pydantic.dev/latest/) for data validation
-  - [Celery](https://docs.celeryq.dev/en/stable/index.html) workers for
+  - [TaskIQ](https://taskiq-python.github.io/) workers for
   processing tasks in the queue
   - [FastAPI](https://fastapi.tiangolo.com/) for the API layer
     - [Security](https://fastapi.tiangolo.com/tutorial/security/)

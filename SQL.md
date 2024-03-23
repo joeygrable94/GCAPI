@@ -484,10 +484,10 @@ Table "gcapidb"."website_keywordcorpus" {
 }
 ```
 
-Website keyword corpus data is collected from a celery worker task that
-scrapes the text content from each page of a website and processes the text
-data into a machine learnable format. The data is then stored in the database
-to later be processed by a machine learning model.
+Website keyword corpus data is collected from a worker task that scrapes the
+text content from each page of a website and processes the text data into a
+machine learnable format. The data is then stored in the database to later
+be processed by a machine learning model.
 
 Keyword corpus data is used to determine the most relevant keywords for a
 website and its pages and calculate the conguency between webpage keywords

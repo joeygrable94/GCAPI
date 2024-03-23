@@ -36,10 +36,6 @@ services:
     ports:
       - 6379:6379
 
-  flower:
-    ports:
-      - 5555:5555
-
   worker:
     volumes:
       - ./backend/app:/app
