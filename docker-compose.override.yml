@@ -61,19 +61,19 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.rule=PathPrefix(`/api`) || PathPrefix(`/docs`) || PathPrefix(`/redoc`)
       - traefik.http.services.${STACK_NAME?Variable not set}-backend.loadbalancer.server.port=80
 
-  # frontend:
-  #   ports:
-  #     - 3000:3000
-  #   build:
-  #     context: ./frontend
-  #     args:
-  #       FRONTEND_ENV: dev
-  #       INSTALL_DEV: ${INSTALL_DEV-true}
-  #   labels:
-  #     - traefik.enable=true
-  #     - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
-  #     - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
-  #     - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
+  frontend:
+    ports:
+      - 3333:3000
+    build:
+      context: ./frontend
+      args:
+        FRONTEND_ENV: dev
+        INSTALL_DEV: ${INSTALL_DEV-true}
+    labels:
+      - traefik.enable=true
+      - traefik.constraint-label-stack=${TRAEFIK_TAG?Variable not set}
+      - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.rule=PathPrefix(`/`)
+      - traefik.http.services.${STACK_NAME?Variable not set}-frontend.loadbalancer.server.port=80
 
 networks:
   traefik-public:

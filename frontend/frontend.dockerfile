@@ -1,16 +1,14 @@
-FROM node:alpine
+FROM node:21 as build-stage
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY ./app/package*.json ./
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # copy build files
 COPY ./app/package.json ./app/package-lock.json \
-    ./app/vite-env.d.ts ./app/vite.config.ts ./app/tsconfig.json \
-    ./app/.prettierrc ./app/.prettierignore \
-    ./app/index.html \
+    ./app/app.config.ts ./app/tsconfig.json \
     ./
 
 # copy code src
@@ -19,8 +17,6 @@ COPY ./app/src ./src
 # copy public dir
 COPY ./app/public ./public
 
-RUN npm run build
-
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]
