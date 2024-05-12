@@ -1,5 +1,6 @@
 # important
 .env
+.env.test
 .gitignore
 .gitmodules
 .github

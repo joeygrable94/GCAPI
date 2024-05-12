@@ -7,8 +7,8 @@ COPY ./app/requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip && pip install --no-cache-dir -r /tmp/requirements.txt \
     && poetry config virtualenvs.create false
 
-COPY ./scripts/prestart-worker.sh ./scripts/start-worker.sh /
-RUN chmod +x /prestart-worker.sh /start-worker.sh
+COPY ./scripts/prestart-scheduler.sh ./scripts/start-scheduler.sh /
+RUN chmod +x /prestart-scheduler.sh /start-scheduler.sh
 
 COPY ./app/scripts /scripts
 COPY ./app/app /app/app
@@ -25,4 +25,4 @@ ENV PYTHONPATH=/app
 
 ENV C_FORCE_ROOT=1
 
-CMD [ "/start-worker.sh" ]
+CMD [ "/start-scheduler.sh" ]

@@ -13,6 +13,9 @@ insert_final_newline = true
 [*.yml]
 indent_size = 2
 
+[*.txt]
+insert_final_newline = false
+
 [*.ini]
 insert_final_newline = false
 

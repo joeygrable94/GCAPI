@@ -3,8 +3,14 @@ set -e
 
 export APP_MODE='test'
 
-# Check the DB is connected.
-python /app/prestart.py
-sleep 1;
+# Run the prestart.sh script if the file exists
+PRE_START_PATH=${PRE_START_PATH:-/prestart.sh}
+echo "Checking for script in $PRE_START_PATH"
+if [ -f $PRE_START_PATH ] ; then
+    echo "Running script $PRE_START_PATH"
+    . "$PRE_START_PATH"
+else
+    echo "There is no script $PRE_START_PATH"
+fi
 
 bash /app/scripts/test.sh "$@"

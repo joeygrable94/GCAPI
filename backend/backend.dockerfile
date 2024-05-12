@@ -13,7 +13,7 @@ RUN chmod +x /prestart.sh /start.sh /start-reload.sh /start-tests.sh
 COPY ./app/scripts /scripts
 COPY ./app/app /app/app
 COPY ./app/alembic /app/alembic
-COPY ./app/alembic.ini ./app/cli.py ./app/prestart.py ./app/start.py /app/
+COPY ./app/alembic.ini ./app/cli.py /app/
 WORKDIR /app/
 
 # Copy poetry.lock* in case it doesn't exist in the repo

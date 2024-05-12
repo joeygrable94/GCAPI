@@ -7,7 +7,10 @@ echo "Prestarting Backend API..."
 python cli.py secure load-keys
 
 # Check DB connection
-python cli.py db check-connection
+python cli.py db check-db-connection
+
+# Check Redis connection
+python cli.py db check-redis-connection
 
 # DO NOT USE UNLESS DEBUGGING
 # python cli.py db create-db
