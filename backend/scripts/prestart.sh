@@ -16,7 +16,7 @@ python cli.py db check-redis-connection
 # python cli.py db create-db
 
 # Upgrade DB
-echo "Running Backend Database Table Migrations..."
+# echo "Running Backend Database Table Migrations..."
 alembic upgrade head
 
 # Create initial data

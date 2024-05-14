@@ -1,9 +1,6 @@
 services:
 
   proxy:
-    ports:
-      - 80:80
-      - 8090:8080
     command:
       - --providers.docker
       - --providers.docker.constraints=Label(`traefik.constraint-label-stack`, `${TRAEFIK_TAG?Variable not set}`)
