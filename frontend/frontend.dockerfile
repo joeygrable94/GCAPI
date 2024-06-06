@@ -1,22 +1,15 @@
-FROM node:21 as build-stage
+FROM node:21-bullseye
 
 WORKDIR /app
 
-COPY ./app/package*.json ./
+COPY ./app2/package*.json ./
 
 RUN npm ci
 
-# copy build files
-COPY ./app/package.json ./app/package-lock.json \
-    ./app/app.config.ts ./app/tsconfig.json \
-    ./
+COPY ./app ./
 
-# copy code src
-COPY ./app/src ./src
-
-# copy public dir
-COPY ./app/public ./public
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["node", "/app/.output/server/index.mjs"]
