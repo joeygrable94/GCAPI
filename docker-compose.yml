@@ -133,7 +133,7 @@ services:
       - gcapi_network
     restart: "on-failure"
     volumes:
-      - ./frontend/app2:/app
+      - ./frontend/app:/app
     build:
       context: ./frontend
       dockerfile: frontend.dockerfile
