@@ -109,6 +109,8 @@ services:
   backend:
     image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-backend:${TAG-latest}'
     env_file: .env
+    ports:
+      - 8888:8888
     networks:
       - gcapi_network
     restart: "on-failure"
