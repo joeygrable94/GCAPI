@@ -1,6 +1,6 @@
-FROM node:21-bullseye
+FROM node:21-bullseye as builder
 
-WORKDIR /app
+WORKDIR /build
 
 COPY ./app/package*.json ./
 
@@ -9,6 +9,16 @@ RUN npm ci
 COPY ./app ./
 
 RUN npm run build
+
+FROM node:alpine as runner
+
+WORKDIR /app
+
+COPY --from=builder build/package*.json .
+COPY --from=builder build/.output .
+COPY --from=builder build/.env .
+
+RUN npm ci
 
 EXPOSE 3000
 

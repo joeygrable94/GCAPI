@@ -1,5 +1,4 @@
 services:
-
   proxy:
     image: nginx:latest
     env_file: .env
@@ -55,7 +54,7 @@ services:
       - gcapi_network
     restart: "unless-stopped"
     healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -63,12 +62,12 @@ services:
       - app_cache_data:/data
 
   scheduler:
-    image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-scheduler:${TAG-latest}'
+    image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-scheduler:${TAG-latest}"
     env_file:
       - .env
     networks:
       - gcapi_network
-    restart: "on-failure"
+    restart: "unless-stopped"
     volumes:
       - ./backend/app:/app
     depends_on:
@@ -84,12 +83,12 @@ services:
         INSTALL_DEV: ${INSTALL_DEV-true}
 
   worker:
-    image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-worker:${TAG-latest}'
+    image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-worker:${TAG-latest}"
     env_file:
       - .env
     networks:
       - gcapi_network
-    restart: "on-failure"
+    restart: "unless-stopped"
     volumes:
       - ./backend/app:/app
     depends_on:
@@ -107,7 +106,7 @@ services:
         INSTALL_DEV: ${INSTALL_DEV-true}
 
   backend:
-    image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-backend:${TAG-latest}'
+    image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-backend:${TAG-latest}"
     env_file: .env
     ports:
       - 8888:8888
@@ -128,19 +127,19 @@ services:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
 
-  frontend:
-    image: '${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-frontend:${TAG-latest}'
-    env_file: .env
-    networks:
-      - gcapi_network
-    restart: "on-failure"
-    volumes:
-      - ./frontend/app:/app
-    build:
-      context: ./frontend
-      dockerfile: frontend.dockerfile
-      args:
-        INSTALL_DEV: ${INSTALL_DEV-true}
+  # frontend:
+  #   image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-frontend:${TAG-latest}"
+  #   env_file: .env
+  #   networks:
+  #     - gcapi_network
+  #   restart: "on-failure"
+  #   volumes:
+  #     - ./frontend/app:/app
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: frontend.dockerfile
+  #     args:
+  #       INSTALL_DEV: ${INSTALL_DEV-true}
 
 volumes:
   app_db_data:
