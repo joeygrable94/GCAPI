@@ -7,6 +7,9 @@ test
 dist/
 .data
 
+# Infrastructure as Code Files
+infrastructure
+
 # App Files
 # Backend
 backend/app/**
