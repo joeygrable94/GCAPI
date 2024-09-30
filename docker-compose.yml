@@ -127,20 +127,6 @@ services:
       args:
         INSTALL_DEV: ${INSTALL_DEV-true}
 
-  # frontend:
-  #   image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-frontend:${TAG-latest}"
-  #   env_file: .env
-  #   networks:
-  #     - gcapi_network
-  #   restart: "on-failure"
-  #   volumes:
-  #     - ./frontend/app:/app
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: frontend.dockerfile
-  #     args:
-  #       INSTALL_DEV: ${INSTALL_DEV-true}
-
 volumes:
   app_db_data:
     driver: local
