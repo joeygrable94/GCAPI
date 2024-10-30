@@ -10,7 +10,7 @@ python cli.py secure load-keys
 python cli.py db check-db-connection
 
 # Check Redis connection
-python cli.py db check-redis-connection
+# python cli.py db check-redis-connection
 
 # DO NOT USE UNLESS DEBUGGING
 # python cli.py db create-db

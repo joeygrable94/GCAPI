@@ -9,7 +9,6 @@ if [ -f .env ]; then
 fi
 
 DOMAIN=${DOMAIN?Variable not set} \
-EMAIL_SMTP_HOST="" \
 TRAEFIK_PUBLIC_NETWORK_IS_EXTERNAL=false \
 INSTALL_DEV=true \
 docker compose \

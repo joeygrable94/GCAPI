@@ -48,63 +48,6 @@ services:
       - ./config/sql/privileges.sql:/docker-entrypoint-initdb.d/1.sql
       - app_db_data:/var/lib/mysql
 
-  cache:
-    image: redis:7
-    networks:
-      - gcapi_network
-    restart: "unless-stopped"
-    healthcheck:
-      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    volumes:
-      - app_cache_data:/data
-
-  scheduler:
-    image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-scheduler:${TAG-latest}"
-    env_file:
-      - .env
-    networks:
-      - gcapi_network
-    restart: "unless-stopped"
-    volumes:
-      - ./backend/app:/app
-    depends_on:
-      - cache
-      - db
-    environment:
-      - SERVER_NAME=${API_DOMAIN-localhost}
-      - SERVER_HOST=https://${API_DOMAIN-localhost}
-    build:
-      context: ./backend
-      dockerfile: scheduler.dockerfile
-      args:
-        INSTALL_DEV: ${INSTALL_DEV-true}
-
-  worker:
-    image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-worker:${TAG-latest}"
-    env_file:
-      - .env
-    networks:
-      - gcapi_network
-    restart: "unless-stopped"
-    volumes:
-      - ./backend/app:/app
-    depends_on:
-      - cache
-      - db
-    environment:
-      - SERVER_NAME=${API_DOMAIN-localhost}
-      - SERVER_HOST=https://${API_DOMAIN-localhost}
-      # Allow explicit env var override for tests
-      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST?Variable not set}
-    build:
-      context: ./backend
-      dockerfile: worker.dockerfile
-      args:
-        INSTALL_DEV: ${INSTALL_DEV-true}
-
   backend:
     image: "${DOCKER_IMAGE_PREFIX}/${STACK_NAME}-backend:${TAG-latest}"
     env_file: .env
@@ -116,11 +59,9 @@ services:
     volumes:
       - ./backend/app:/app
     depends_on:
-      - cache
       - db
     environment:
       - SERVER_NAME=${API_DOMAIN-localhost}
-      - EMAIL_SMTP_HOST=${EMAIL_SMTP_HOST}
     build:
       context: ./backend
       dockerfile: backend.dockerfile
@@ -129,8 +70,6 @@ services:
 
 volumes:
   app_db_data:
-    driver: local
-  app_cache_data:
     driver: local
 
 networks:
